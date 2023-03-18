@@ -3,7 +3,9 @@ package com.bizu.querycenter.service;
 import com.bizu.querycenter.dto.EmployeeResponse;
 import com.bizu.querycenter.dto.SaveEmployeeRequest;
 import com.bizu.querycenter.model.Employee;
+import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.repository.EmployeeRepository;
+import com.bizu.querycenter.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,19 +15,17 @@ import java.util.List;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final ReportRepository reportRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository) {
         this.employeeRepository = employeeRepository;
+        this.reportRepository = reportRepository;
     }
 
-    public EmployeeResponse getEmployeeById(Integer id){
+    public Employee getEmployeeById(Integer id){
         Employee employee = employeeRepository.findById(id).orElseThrow(RuntimeException::new);
 
-        return EmployeeResponse.builder()
-                .name(employee.getName())
-                .email(employee.getEmail())
-                .reports(employee.getReports())
-                .build();
+        return employee;
     }
 
     public List<Employee> getAllEmployees(){
@@ -48,6 +48,29 @@ public class EmployeeService {
                 .name(fromDB.getName())
                 .email(fromDB.getEmail())
                 .build();
+    }
+
+    public EmployeeResponse addReportToEmployee(Integer employeeId, Report report){
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+
+        if(doesEmployeeExist(employee.get_id())){
+            List<Report> reports = employee.getReports();
+            reports.add(report);
+            employee.setReports(reports);
+            employeeRepository.save(employee);
+
+            List<Employee> employees = report.getEmployees();
+            employees.add(employee);
+            report.setEmployees(employees);
+            reportRepository.save(report);
+        }
+
+        return EmployeeResponse.builder()
+                .name(employee.getName())
+                .email(employee.getEmail())
+                .reports(employee.getReports())
+                .build();
+
     }
 
     public EmployeeResponse updateEmployee(Integer id, SaveEmployeeRequest request){

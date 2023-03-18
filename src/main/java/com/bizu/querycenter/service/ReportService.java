@@ -19,12 +19,10 @@ public class ReportService {
         this.reportRepository = reportRepository;
     }
 
-    public ReportResponse getReportById(Integer id){
+    public Report getReportById(Integer id){
         Report report = reportRepository.findById(id).orElseThrow(RuntimeException::new);
 
-        return ReportResponse.builder()
-                .name(report.getName())
-                .build();
+        return report;
     }
 
     public List<Report> getAllReports(){

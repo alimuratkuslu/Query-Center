@@ -3,7 +3,9 @@ package com.bizu.querycenter.controller;
 import com.bizu.querycenter.dto.EmployeeResponse;
 import com.bizu.querycenter.dto.SaveEmployeeRequest;
 import com.bizu.querycenter.model.Employee;
+import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.EmployeeService;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +21,8 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable Integer id){
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id){
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
@@ -32,6 +34,11 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<EmployeeResponse> saveEmployee(@RequestBody SaveEmployeeRequest request){
         return ResponseEntity.ok(employeeService.saveEmployee(request));
+    }
+
+    @PostMapping("/addReport/{employeeId}")
+    public ResponseEntity<EmployeeResponse> addReportToEmployee(@PathVariable Integer employeeId, @RequestBody Report report){
+        return ResponseEntity.ok(employeeService.addReportToEmployee(employeeId, report));
     }
 
     @PutMapping("/{id}")
