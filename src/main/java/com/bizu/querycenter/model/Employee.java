@@ -1,30 +1,29 @@
 package com.bizu.querycenter.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "employees")
+@Data
+@Document("employees")
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "employee_report", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "report_id"))
+    @DBRef
     private List<Report> reports;
 
 
