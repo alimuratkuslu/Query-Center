@@ -1,11 +1,19 @@
 package com.bizu.querycenter.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "employees")
 public class Employee {
 
     @Id
@@ -15,6 +23,9 @@ public class Employee {
     private String name;
     private String email;
 
-    // Reports List
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "employee_report", joinColumns = @JoinColumn(name = "employee_id"), inverseJoinColumns = @JoinColumn(name = "report_id"))
+    private List<Report> reports;
+
 
 }
