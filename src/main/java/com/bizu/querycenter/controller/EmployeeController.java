@@ -1,13 +1,11 @@
 package com.bizu.querycenter.controller;
 
 import com.bizu.querycenter.dto.EmployeeResponse;
+import com.bizu.querycenter.dto.SaveEmployeeRequest;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +27,20 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<List<Employee>> getAllEmployees(){
         return ResponseEntity.ok(employeeService.getAllEmployees());
+    }
+
+    @PostMapping
+    public ResponseEntity<EmployeeResponse> saveEmployee(@RequestBody SaveEmployeeRequest request){
+        return ResponseEntity.ok(employeeService.saveEmployee(request));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Integer id, @RequestBody SaveEmployeeRequest request){
+        return ResponseEntity.ok(employeeService.updateEmployee(id, request));
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteEmployee(@PathVariable Integer id){
+        employeeService.deleteEmployeeById(id);
     }
 }

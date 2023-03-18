@@ -49,4 +49,31 @@ public class EmployeeService {
                 .email(fromDB.getEmail())
                 .build();
     }
+
+    public EmployeeResponse updateEmployee(Integer id, SaveEmployeeRequest request){
+        Employee currentEmployee = employeeRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        currentEmployee.setName(request.getName());
+        currentEmployee.setEmail(request.getEmail());
+
+        employeeRepository.save(currentEmployee);
+
+        return EmployeeResponse.builder()
+                .name(currentEmployee.getName())
+                .email(currentEmployee.getEmail())
+                .build();
+    }
+
+    public void deleteEmployeeById(Integer id){
+        if(doesEmployeeExist(id)){
+            employeeRepository.deleteById(id);
+        }
+        else{
+            throw new RuntimeException("Employee does not exist");
+        }
+    }
+
+    private boolean doesEmployeeExist(Integer id){
+        return employeeRepository.existsById(id);
+    }
 }
