@@ -4,7 +4,9 @@ import com.bizu.querycenter.dto.EmployeeResponse;
 import com.bizu.querycenter.dto.SaveEmployeeRequest;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
+import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.repository.EmployeeRepository;
+import com.bizu.querycenter.repository.ReportOwnershipRepository;
 import com.bizu.querycenter.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,12 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ReportRepository reportRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository) {
+    private final ReportOwnershipRepository ownershipRepository;
+
+    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipRepository ownershipRepository) {
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
+        this.ownershipRepository = ownershipRepository;
     }
 
     public Employee getEmployeeById(Integer id){
@@ -63,6 +68,18 @@ public class EmployeeService {
             employees.add(employee);
             report.setEmployees(employees);
             reportRepository.save(report);
+
+            ReportOwnership ownership = ReportOwnership.builder()
+                    ._id(1)
+                    .report(report)
+                    .employee(employee)
+                    .isOwner(true)
+                    .isRead(true)
+                    .isWrite(true)
+                    .isRun(true)
+                    .build();
+
+            ownershipRepository.save(ownership);
         }
 
         return EmployeeResponse.builder()
