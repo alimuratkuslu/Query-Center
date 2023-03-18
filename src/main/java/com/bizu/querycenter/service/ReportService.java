@@ -34,8 +34,14 @@ public class ReportService {
 
     public ReportResponse saveReport(SaveReportRequest request){
 
+        List<Report> reports = getAllReports();
+        List<Employee> employees = new ArrayList<>();
+        int size = reports.size() + 2;
+
         Report report = Report.builder()
+                ._id(size)
                 .name(request.getName())
+                .employees(employees)
                 .build();
 
         Report fromDB = reportRepository.save(report);

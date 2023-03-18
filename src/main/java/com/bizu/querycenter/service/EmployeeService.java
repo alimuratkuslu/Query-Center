@@ -1,12 +1,9 @@
 package com.bizu.querycenter.service;
 
-import com.bizu.querycenter.dto.EmployeeResponse;
-import com.bizu.querycenter.dto.SaveEmployeeRequest;
+import com.bizu.querycenter.dto.*;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
-import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.repository.EmployeeRepository;
-import com.bizu.querycenter.repository.ReportOwnershipRepository;
 import com.bizu.querycenter.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +16,13 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ReportRepository reportRepository;
 
-    private final ReportOwnershipRepository ownershipRepository;
+    private final ReportOwnershipService ownershipService;
 
-    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipRepository ownershipRepository) {
+
+    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipService ownershipService) {
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
-        this.ownershipRepository = ownershipRepository;
+        this.ownershipService = ownershipService;
     }
 
     public Employee getEmployeeById(Integer id){
@@ -42,9 +40,15 @@ public class EmployeeService {
 
     public EmployeeResponse saveEmployee(SaveEmployeeRequest request){
 
+        List<Employee> employees = getAllEmployees();
+        List<Report> reports = new ArrayList<>();
+        int size = employees.size() + 2;
+
         Employee employee = Employee.builder()
+                ._id(size)
                 .name(request.getName())
                 .email(request.getEmail())
+                .reports(reports)
                 .build();
 
         Employee fromDB = employeeRepository.save(employee);
@@ -55,40 +59,86 @@ public class EmployeeService {
                 .build();
     }
 
-    public EmployeeResponse addReportToEmployee(Integer employeeId, Report report){
+    public OwnershipDto addReportToEmployee(Integer employeeId, AddReportToEmployee report){
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        Report reportFromDB = reportRepository.findByName(report.getReportName());
 
         if(doesEmployeeExist(employee.get_id())){
             List<Report> reports = employee.getReports();
-            reports.add(report);
+            reports.add(reportFromDB);
             employee.setReports(reports);
             employeeRepository.save(employee);
 
-            List<Employee> employees = report.getEmployees();
+            List<Employee> employees = reportFromDB.getEmployees();
             employees.add(employee);
-            report.setEmployees(employees);
-            reportRepository.save(report);
-
-            ReportOwnership ownership = ReportOwnership.builder()
-                    ._id(1)
-                    .report(report)
-                    .employee(employee)
-                    .isOwner(true)
-                    .isRead(true)
-                    .isWrite(true)
-                    .isRun(true)
-                    .build();
-
-            ownershipRepository.save(ownership);
+            reportFromDB.setEmployees(employees);
+            reportRepository.save(reportFromDB);
         }
 
-        return EmployeeResponse.builder()
-                .name(employee.getName())
-                .email(employee.getEmail())
-                .reports(employee.getReports())
+        return OwnershipDto.builder()
+                .report(reportFromDB)
+                .employee(employee)
+                .build();
+    }
+
+    public void giveOwnershipToEmployee(Integer employeeId, AddReportToEmployee report){
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        Report reportFromDB = reportRepository.findByName(report.getReportName());
+
+        addReportToEmployee(employeeId, report);
+
+        SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
+                .report(reportFromDB)
+                .employee(employee)
+                .isOwner(true)
+                .isRead(false)
+                .isWrite(false)
+                .isRun(false)
                 .build();
 
+        ownershipService.saveOwnership(ownershipRequest);
     }
+
+    /*
+    public EmployeeResponse giveReadOwnership(Integer employeeId, AddReportToEmployee report){
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        Report reportFromDB = reportRepository.findByName(report.getReportName());
+
+        if(!reportFromDB.getEmployees().contains(employee)){
+
+            List<Report> reports = employee.getReports();
+            reports.add(reportFromDB);
+            employee.setReports(reports);
+            employeeRepository.save(employee);
+
+            List<Employee> employees = reportFromDB.getEmployees();
+            employees.add(employee);
+            reportFromDB.setEmployees(employees);
+            reportRepository.save(reportFromDB);
+
+            SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
+                    .report(reportFromDB)
+                    .employee(employee)
+                    .isOwner(false)
+                    .isRead(true)
+                    .isWrite(false)
+                    .isRun(false)
+                    .build();
+
+            ownershipService.saveOwnership(ownershipRequest);
+
+            return EmployeeResponse.builder()
+                    .name(employee.getName())
+                    .email(employee.getEmail())
+                    .reports(employee.getReports())
+                    .build();
+        }
+        else{
+            throw new RuntimeException("Employee is owner of this report");
+        }
+    }
+     */
 
     public EmployeeResponse updateEmployee(Integer id, SaveEmployeeRequest request){
         Employee currentEmployee = employeeRepository.findById(id).orElseThrow(RuntimeException::new);

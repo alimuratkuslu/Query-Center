@@ -7,12 +7,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SaveOwnershipRequest {
+public class OwnershipDto {
 
     private Report report;
     private Employee employee;
-    private boolean isOwner;
-    private boolean isRead;
-    private boolean isWrite;
-    private boolean isRun;
 }

@@ -1,11 +1,10 @@
 package com.bizu.querycenter.controller;
 
+import com.bizu.querycenter.dto.AddReportToEmployee;
 import com.bizu.querycenter.dto.EmployeeResponse;
 import com.bizu.querycenter.dto.SaveEmployeeRequest;
 import com.bizu.querycenter.model.Employee;
-import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.EmployeeService;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,9 +35,9 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.saveEmployee(request));
     }
 
-    @PostMapping("/addReport/{employeeId}")
-    public ResponseEntity<EmployeeResponse> addReportToEmployee(@PathVariable Integer employeeId, @RequestBody Report report){
-        return ResponseEntity.ok(employeeService.addReportToEmployee(employeeId, report));
+    @PostMapping("/giveOwnership/{employeeId}")
+    public void giveOwnership(@PathVariable Integer employeeId, @RequestBody AddReportToEmployee report){
+        employeeService.giveOwnershipToEmployee(employeeId, report);
     }
 
     @PutMapping("/{id}")

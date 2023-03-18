@@ -32,8 +32,11 @@ public class ReportOwnershipService {
     }
 
     public ReportOwnership saveOwnership(SaveOwnershipRequest request){
+        List<ReportOwnership> ownerships = getAllOwnerships();
+        int size = ownerships.size() + 2;
+
         ReportOwnership ownership = ReportOwnership.builder()
-                ._id(request.get_id())
+                ._id(size)
                 .report(request.getReport())
                 .employee(request.getEmployee())
                 .isOwner(request.isOwner())
