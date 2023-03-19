@@ -194,28 +194,28 @@ public class EmployeeService {
         ownershipService.saveOwnership(ownershipRequest);
     }
 
-    /*
     public void deleteOwnership(Integer employeeId, AddReportToEmployee report){
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
         Report reportFromDB = reportRepository.findByName(report.getReportName());
+        ReportOwnership ownership = ownershipService.doesEmployeeHaveOwnership(employeeId, reportFromDB.get_id());
 
-        if(reportFromDB.getEmployees().contains(employee)
-                && ownershipService.doesEmployeeHaveOwnership(employeeId, reportFromDB.get_id())){
+        ownership.setOwner(false);
+        ownership.setRead(false);
+        ownership.setWrite(false);
+        ownership.setRun(false);
 
-            ownershipService.deleteOwnership(employeeId, reportFromDB.get_id());
+        // ownershipService.deleteOwnership(employeeId, reportFromDB.get_id());
 
-            List<Report> reports = employee.getReports();
-            reports.remove(reportFromDB);
-            employee.setReports(reports);
-            employeeRepository.save(employee);
+        List<Report> reports = employee.getReports();
+        reports.remove(reportFromDB);
+        employee.setReports(reports);
+        employeeRepository.save(employee);
 
-            List<Employee> employees = reportFromDB.getEmployees();
-            employees.remove(employee);
-            reportFromDB.setEmployees(employees);
-            reportRepository.save(reportFromDB);
-        }
+        List<Employee> employees = reportFromDB.getEmployees();
+        employees.remove(employee);
+        reportFromDB.setEmployees(employees);
+        reportRepository.save(reportFromDB);
     }
-     */
 
     public EmployeeResponse updateEmployee(Integer id, SaveEmployeeRequest request){
         Employee currentEmployee = employeeRepository.findById(id).orElseThrow(RuntimeException::new);
