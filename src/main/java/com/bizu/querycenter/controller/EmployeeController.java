@@ -40,6 +40,26 @@ public class EmployeeController {
         employeeService.giveOwnershipToEmployee(employeeId, report);
     }
 
+    @PostMapping("/giveReadOwnership/{employeeId}")
+    public void giveReadOwnership(@PathVariable Integer employeeId, @RequestBody AddReportToEmployee report){
+        employeeService.giveReadOwnership(employeeId, report);
+    }
+
+    @PostMapping("/giveWriteOwnership/{employeeId}")
+    public void giveWriteOwnership(@PathVariable Integer employeeId, @RequestBody AddReportToEmployee report){
+        employeeService.giveWriteOwnership(employeeId, report);
+    }
+
+    @PostMapping("/giveRunOwnership/{employeeId}")
+    public void giveRunOwnership(@PathVariable Integer employeeId, @RequestBody AddReportToEmployee report){
+        employeeService.giveRunOwnership(employeeId, report);
+    }
+
+    @PostMapping("/giveAllOwnerships/{employeeId}")
+    public void giveAllOwnerships(@PathVariable Integer employeeId, @RequestBody AddReportToEmployee report){
+        employeeService.giveAllOwnerships(employeeId, report);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Integer id, @RequestBody SaveEmployeeRequest request){
         return ResponseEntity.ok(employeeService.updateEmployee(id, request));

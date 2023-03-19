@@ -100,45 +100,81 @@ public class EmployeeService {
         ownershipService.saveOwnership(ownershipRequest);
     }
 
-    /*
-    public EmployeeResponse giveReadOwnership(Integer employeeId, AddReportToEmployee report){
+    public void giveReadOwnership(Integer employeeId, AddReportToEmployee report){
+
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
         Report reportFromDB = reportRepository.findByName(report.getReportName());
 
-        if(!reportFromDB.getEmployees().contains(employee)){
+        addReportToEmployee(employeeId, report);
 
-            List<Report> reports = employee.getReports();
-            reports.add(reportFromDB);
-            employee.setReports(reports);
-            employeeRepository.save(employee);
+        SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
+                .report(reportFromDB)
+                .employee(employee)
+                .isOwner(false)
+                .isRead(true)
+                .isWrite(false)
+                .isRun(false)
+                .build();
 
-            List<Employee> employees = reportFromDB.getEmployees();
-            employees.add(employee);
-            reportFromDB.setEmployees(employees);
-            reportRepository.save(reportFromDB);
-
-            SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
-                    .report(reportFromDB)
-                    .employee(employee)
-                    .isOwner(false)
-                    .isRead(true)
-                    .isWrite(false)
-                    .isRun(false)
-                    .build();
-
-            ownershipService.saveOwnership(ownershipRequest);
-
-            return EmployeeResponse.builder()
-                    .name(employee.getName())
-                    .email(employee.getEmail())
-                    .reports(employee.getReports())
-                    .build();
-        }
-        else{
-            throw new RuntimeException("Employee is owner of this report");
-        }
+        ownershipService.saveOwnership(ownershipRequest);
     }
-     */
+
+    public void giveWriteOwnership(Integer employeeId, AddReportToEmployee report){
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        Report reportFromDB = reportRepository.findByName(report.getReportName());
+
+        addReportToEmployee(employeeId, report);
+
+        SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
+                .report(reportFromDB)
+                .employee(employee)
+                .isOwner(false)
+                .isRead(false)
+                .isWrite(true)
+                .isRun(false)
+                .build();
+
+        ownershipService.saveOwnership(ownershipRequest);
+    }
+
+    public void giveRunOwnership(Integer employeeId, AddReportToEmployee report){
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        Report reportFromDB = reportRepository.findByName(report.getReportName());
+
+        addReportToEmployee(employeeId, report);
+
+        SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
+                .report(reportFromDB)
+                .employee(employee)
+                .isOwner(false)
+                .isRead(false)
+                .isWrite(false)
+                .isRun(true)
+                .build();
+
+        ownershipService.saveOwnership(ownershipRequest);
+    }
+
+    public void giveAllOwnerships(Integer employeeId, AddReportToEmployee report){
+
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        Report reportFromDB = reportRepository.findByName(report.getReportName());
+
+        addReportToEmployee(employeeId, report);
+
+        SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
+                .report(reportFromDB)
+                .employee(employee)
+                .isOwner(false)
+                .isRead(true)
+                .isWrite(true)
+                .isRun(true)
+                .build();
+
+        ownershipService.saveOwnership(ownershipRequest);
+    }
 
     public EmployeeResponse updateEmployee(Integer id, SaveEmployeeRequest request){
         Employee currentEmployee = employeeRepository.findById(id).orElseThrow(RuntimeException::new);
