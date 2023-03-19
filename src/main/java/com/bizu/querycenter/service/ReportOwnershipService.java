@@ -23,6 +23,28 @@ public class ReportOwnershipService {
 
         return ownership;
     }
+    
+    public ReportOwnership doesEmployeeHaveOwnership(Integer employeeId, Integer reportId){
+        List<ReportOwnership> ownerships = getAllOwnerships();
+
+        for (int i = 0; i < ownerships.size(); i++) {
+            if(ownerships.get(i).getEmployee().get_id() == employeeId && ownerships.get(i).getReport().get_id() == reportId){
+                return ownerships.get(i);
+            }
+        }
+
+        throw new RuntimeException("Employee with id: " + employeeId + " does not have ownership");
+    }
+
+    public void deleteOwnership(Integer employeeId, Integer reportId){
+        List<ReportOwnership> ownerships = getAllOwnerships();
+
+        for (int i = 0; i < ownerships.size(); i++) {
+            if(ownerships.get(i).getEmployee().get_id() == employeeId && ownerships.get(i).getReport().get_id() == reportId){
+                ownerships.remove(ownerships.get(i));
+            }
+        }
+    }
 
     public List<ReportOwnership> getAllOwnerships(){
         List<ReportOwnership> ownerships = new ArrayList<>();

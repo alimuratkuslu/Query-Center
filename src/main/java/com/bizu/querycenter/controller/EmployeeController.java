@@ -60,6 +60,11 @@ public class EmployeeController {
         employeeService.giveAllOwnerships(employeeId, report);
     }
 
+    @PostMapping("/deleteOwnership/{employeeId}")
+    public void deleteOwnership(@PathVariable Integer employeeId, @RequestBody AddReportToEmployee report){
+        employeeService.deleteOwnership(employeeId, report);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable Integer id, @RequestBody SaveEmployeeRequest request){
         return ResponseEntity.ok(employeeService.updateEmployee(id, request));

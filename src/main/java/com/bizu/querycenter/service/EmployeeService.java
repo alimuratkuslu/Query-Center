@@ -3,6 +3,7 @@ package com.bizu.querycenter.service;
 import com.bizu.querycenter.dto.*;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
+import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.repository.EmployeeRepository;
 import com.bizu.querycenter.repository.ReportRepository;
 import org.springframework.stereotype.Service;
@@ -86,15 +87,18 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
         Report reportFromDB = reportRepository.findByName(report.getReportName());
 
+        ReportOwnership ownership = ownershipService.doesEmployeeHaveOwnership(employeeId, reportFromDB.get_id());
         addReportToEmployee(employeeId, report);
+
+        ownership.setOwner(true);
 
         SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
                 .report(reportFromDB)
                 .employee(employee)
-                .isOwner(true)
-                .isRead(false)
-                .isWrite(false)
-                .isRun(false)
+                .isOwner(ownership.isOwner())
+                .isRead(ownership.isRead())
+                .isWrite(ownership.isWrite())
+                .isRun(ownership.isRun())
                 .build();
 
         ownershipService.saveOwnership(ownershipRequest);
@@ -105,15 +109,18 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
         Report reportFromDB = reportRepository.findByName(report.getReportName());
 
+        ReportOwnership ownership = ownershipService.doesEmployeeHaveOwnership(employeeId, reportFromDB.get_id());
         addReportToEmployee(employeeId, report);
+
+        ownership.setRead(true);
 
         SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
                 .report(reportFromDB)
                 .employee(employee)
-                .isOwner(false)
-                .isRead(true)
-                .isWrite(false)
-                .isRun(false)
+                .isOwner(ownership.isOwner())
+                .isRead(ownership.isRead())
+                .isWrite(ownership.isWrite())
+                .isRun(ownership.isRun())
                 .build();
 
         ownershipService.saveOwnership(ownershipRequest);
@@ -123,16 +130,19 @@ public class EmployeeService {
 
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
         Report reportFromDB = reportRepository.findByName(report.getReportName());
+        ReportOwnership ownership = ownershipService.doesEmployeeHaveOwnership(employeeId, reportFromDB.get_id());
 
         addReportToEmployee(employeeId, report);
+
+        ownership.setWrite(true);
 
         SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
                 .report(reportFromDB)
                 .employee(employee)
-                .isOwner(false)
-                .isRead(false)
-                .isWrite(true)
-                .isRun(false)
+                .isOwner(ownership.isOwner())
+                .isRead(ownership.isRead())
+                .isWrite(ownership.isWrite())
+                .isRun(ownership.isRun())
                 .build();
 
         ownershipService.saveOwnership(ownershipRequest);
@@ -142,16 +152,19 @@ public class EmployeeService {
 
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
         Report reportFromDB = reportRepository.findByName(report.getReportName());
+        ReportOwnership ownership = ownershipService.doesEmployeeHaveOwnership(employeeId, reportFromDB.get_id());
 
         addReportToEmployee(employeeId, report);
+
+        ownership.setRun(true);
 
         SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
                 .report(reportFromDB)
                 .employee(employee)
-                .isOwner(false)
-                .isRead(false)
-                .isWrite(false)
-                .isRun(true)
+                .isOwner(ownership.isOwner())
+                .isRead(ownership.isRead())
+                .isWrite(ownership.isWrite())
+                .isRun(ownership.isRun())
                 .build();
 
         ownershipService.saveOwnership(ownershipRequest);
@@ -161,20 +174,48 @@ public class EmployeeService {
 
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
         Report reportFromDB = reportRepository.findByName(report.getReportName());
+        ReportOwnership ownership = ownershipService.doesEmployeeHaveOwnership(employeeId, reportFromDB.get_id());
 
         addReportToEmployee(employeeId, report);
+
+        ownership.setRead(true);
+        ownership.setWrite(true);
+        ownership.setRun(true);
 
         SaveOwnershipRequest ownershipRequest = SaveOwnershipRequest.builder()
                 .report(reportFromDB)
                 .employee(employee)
-                .isOwner(false)
-                .isRead(true)
-                .isWrite(true)
-                .isRun(true)
+                .isOwner(ownership.isOwner())
+                .isRead(ownership.isRead())
+                .isWrite(ownership.isWrite())
+                .isRun(ownership.isRun())
                 .build();
 
         ownershipService.saveOwnership(ownershipRequest);
     }
+
+    /*
+    public void deleteOwnership(Integer employeeId, AddReportToEmployee report){
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(RuntimeException::new);
+        Report reportFromDB = reportRepository.findByName(report.getReportName());
+
+        if(reportFromDB.getEmployees().contains(employee)
+                && ownershipService.doesEmployeeHaveOwnership(employeeId, reportFromDB.get_id())){
+
+            ownershipService.deleteOwnership(employeeId, reportFromDB.get_id());
+
+            List<Report> reports = employee.getReports();
+            reports.remove(reportFromDB);
+            employee.setReports(reports);
+            employeeRepository.save(employee);
+
+            List<Employee> employees = reportFromDB.getEmployees();
+            employees.remove(employee);
+            reportFromDB.setEmployees(employees);
+            reportRepository.save(reportFromDB);
+        }
+    }
+     */
 
     public EmployeeResponse updateEmployee(Integer id, SaveEmployeeRequest request){
         Employee currentEmployee = employeeRepository.findById(id).orElseThrow(RuntimeException::new);
