@@ -1,5 +1,6 @@
 package com.bizu.querycenter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,20 +15,19 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Data
-@Document("Reports")
-public class Report {
+@Document("Schedules")
+public class Schedule {
 
     @Id
     private Integer _id;
 
     private String name;
 
-    private String sqlQuery;
+    private String triggerFreq;
 
+    private List<String> recipients;
+
+    @JsonIgnore
     @DBRef
-    private List<Employee> employees;
-
-    @DBRef
-    private List<Schedule> schedules;
-
+    private List<Report> reports;
 }
