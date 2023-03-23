@@ -1,8 +1,6 @@
 package com.bizu.querycenter.controller;
 
-import com.bizu.querycenter.dto.EmployeeResponse;
-import com.bizu.querycenter.dto.ReportResponse;
-import com.bizu.querycenter.dto.SaveReportRequest;
+import com.bizu.querycenter.dto.*;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.ReportService;
@@ -34,6 +32,16 @@ public class ReportController {
     @PostMapping
     public ResponseEntity<ReportResponse> saveReport(@RequestBody SaveReportRequest request){
         return ResponseEntity.ok(reportService.saveReport(request));
+    }
+
+    @PostMapping("/addQuery/{reportId}")
+    public ResponseEntity<ReportResponse> addQueryToReport(@PathVariable Integer reportId, @RequestBody AddQueryToReport query){
+        return ResponseEntity.ok(reportService.addQuery(reportId, query));
+    }
+
+    @PostMapping("/addSchedule")
+    public ResponseEntity<ReportResponse> addScheduleToReport(@RequestBody AddScheduleToReport scheduleDto){
+        return ResponseEntity.ok(reportService.addScheduleToReport(scheduleDto));
     }
 
     @PutMapping("/{id}")

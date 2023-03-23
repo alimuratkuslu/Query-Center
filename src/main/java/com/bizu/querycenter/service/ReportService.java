@@ -1,9 +1,12 @@
 package com.bizu.querycenter.service;
 
+import com.bizu.querycenter.dto.AddQueryToReport;
+import com.bizu.querycenter.dto.AddScheduleToReport;
 import com.bizu.querycenter.dto.ReportResponse;
 import com.bizu.querycenter.dto.SaveReportRequest;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
+import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.repository.ReportRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +17,11 @@ import java.util.List;
 public class ReportService {
 
     private final ReportRepository reportRepository;
+    private final ScheduleService scheduleService;
 
-    public ReportService(ReportRepository reportRepository) {
+    public ReportService(ReportRepository reportRepository, ScheduleService scheduleService) {
         this.reportRepository = reportRepository;
+        this.scheduleService = scheduleService;
     }
 
     public Report getReportById(Integer id){
@@ -48,6 +53,35 @@ public class ReportService {
 
         return ReportResponse.builder()
                 .name(fromDB.getName())
+                .build();
+    }
+
+    public ReportResponse addQuery(Integer reportId, AddQueryToReport query){
+        Report report = getReportById(reportId);
+
+        report.setSqlQuery(query.getQuery());
+        reportRepository.save(report);
+
+        return ReportResponse.builder()
+                .name(report.getName())
+                .sqlQuery(report.getSqlQuery())
+                .employees(report.getEmployees())
+                .build();
+    }
+
+    public ReportResponse addScheduleToReport(AddScheduleToReport reportDto){
+        Report report = getReportById(reportDto.getReportId());
+        Schedule schedule = scheduleService.getScheduleById(reportDto.getScheduleId());
+        List<Schedule> schedules = report.getSchedules();
+        schedules.add(schedule);
+
+        report.setSchedules(schedules);
+
+        return ReportResponse.builder()
+                .name(report.getName())
+                .sqlQuery(report.getSqlQuery())
+                .employees(report.getEmployees())
+                .schedules(report.getSchedules())
                 .build();
     }
 
