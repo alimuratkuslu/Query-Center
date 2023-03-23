@@ -20,7 +20,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id){
         return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }

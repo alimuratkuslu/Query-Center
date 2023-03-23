@@ -48,6 +48,7 @@ public class ScheduleService {
                 .name(request.getName())
                 .mailSubject(request.getMailSubject())
                 .recipients(request.getRecipients())
+                .reports(reports)
                 .build();
 
         Schedule fromDB = scheduleRepository.save(schedule);

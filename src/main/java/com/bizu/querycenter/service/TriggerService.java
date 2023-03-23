@@ -1,5 +1,9 @@
 package com.bizu.querycenter.service;
 
+import com.bizu.querycenter.dto.SaveScheduleRequest;
+import com.bizu.querycenter.dto.SaveTriggerRequest;
+import com.bizu.querycenter.dto.ScheduleResponse;
+import com.bizu.querycenter.dto.TriggerResponse;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.model.Trigger;
 import com.bizu.querycenter.repository.TriggerRepository;
@@ -28,5 +32,48 @@ public class TriggerService {
         triggerRepository.findAll().forEach(triggers::add);
 
         return triggers;
+    }
+
+    public TriggerResponse saveTrigger(SaveTriggerRequest request){
+        List<Trigger> triggers = getAllTriggers();
+
+        int size = triggers.size() + 2;
+
+        Trigger trigger = Trigger.builder()
+                ._id(size)
+                .name(request.getName())
+                .schedules(request.getSchedules())
+                .build();
+
+        Trigger fromDB = triggerRepository.save(trigger);
+
+        return TriggerResponse.builder()
+                .name(fromDB.getName())
+                .build();
+    }
+
+    public TriggerResponse updateTrigger(Integer id, SaveTriggerRequest request){
+        Trigger currentTrigger = getTriggerById(id);
+        currentTrigger.setName(request.getName());
+        currentTrigger.setSchedules(request.getSchedules());
+
+        triggerRepository.save(currentTrigger);
+
+        return TriggerResponse.builder()
+                .name(currentTrigger.getName())
+                .build();
+    }
+
+    public void deleteTriggerById(Integer id){
+        if(doesTriggerExist(id)){
+            triggerRepository.deleteById(id);
+        }
+        else{
+            throw new RuntimeException("Trigger does not exist");
+        }
+    }
+
+    private boolean doesTriggerExist(Integer id){
+        return triggerRepository.existsById(id);
     }
 }
