@@ -8,4 +8,5 @@ import lombok.Data;
 public class SaveReportRequest {
 
     private String name;
+    private String sqlQuery;
 }

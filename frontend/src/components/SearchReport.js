@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
-import Dashboard from './Dashboard';
+import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
 
 function SearchReport() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -78,8 +77,8 @@ function SearchReport() {
               <TableBody>
                 <TableRow>
                   <TableCell component="th" scope="row">SQL Query:</TableCell>
-                  <TableCell align="left">
-                        <Button variant='outlined' onClick={() => setShowModal(!showModal)}>Show Query</Button>
+                    <TableCell align="left">
+                          <Button variant='outlined' onClick={() => setShowModal(!showModal)}>Show Query</Button>
                     </TableCell>
                 </TableRow>
                 <TableRow>

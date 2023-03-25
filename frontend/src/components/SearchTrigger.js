@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
+import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
 
-function SearchEmployee() {
+function SearchTrigger() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [allEmployees, setAllEmployees] = useState([]);
+  const [allTriggers, setAllTriggers] = useState([]);
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`/employee/searchEmployee?name=${searchTerm}`);
+      const response = await fetch(`/trigger/searchTrigger?name=${searchTerm}`);
       const data = await response.json();
       console.log(data);
       setSearchResults(Array.isArray(data) ? data : [data]);
@@ -19,13 +19,13 @@ function SearchEmployee() {
   };
 
   useEffect(() => {
-    const fetchEmployees = async () => {
-        const employeeData = await fetch('/employee');
-        const employeeJson = await employeeData.json();
-        console.log(employeeJson);
-        setAllEmployees(employeeJson);
+    const fetchTriggers = async () => {
+        const triggerData = await fetch('/trigger');
+        const triggerJson = await triggerData.json();
+        console.log(triggerJson);
+        setAllTriggers(triggerJson);
     };
-    fetchEmployees();
+    fetchTriggers();
   }, []);
 
   const handleInputChange = (event) => {
@@ -45,17 +45,17 @@ function SearchEmployee() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <br />
       <Autocomplete
-            id="search-employees"
+            id="search-triggers"
             style={{ width: '50%'}}
             disablePortal
-            options={allEmployees}
+            options={allTriggers}
             getOptionLabel={option => option.name}
-            value={allEmployees.find(employee => employee.name === searchTerm) || null}
+            value={allTriggers.find(trigger => trigger.name === searchTerm) || null}
             onChange={handleAutocompleteChange}
             renderInput={params => (
             <TextField
                 {...params}
-                label="Search Employees"
+                label="Search Triggers"
                 margin='normal'
                 variant="outlined"
                 fullWidth
@@ -71,18 +71,6 @@ function SearchEmployee() {
       {searchResults.map(result => (
         <Card key={result._id} style={{ width: '80%', margin: '1rem 0' }}>
           <h3 style={{ margin: '0.5rem' }}>{result.name}</h3>
-          <TableContainer component={Paper}>
-            <Table aria-label="employee attributes">
-              <TableBody>
-                <TableRow>
-                  <TableCell component="th" scope="row">Email:</TableCell>
-                  <TableCell align="left">
-                        {result.email}
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
         </Card>
       ))}
       </div>
@@ -90,4 +78,4 @@ function SearchEmployee() {
   );
 }
 
-export default SearchEmployee;
+export default SearchTrigger;

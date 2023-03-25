@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
+import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
 
-function SearchEmployee() {
+function SearchSchedule() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [allEmployees, setAllEmployees] = useState([]);
+  const [allSchedules, setAllSchedules] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`/employee/searchEmployee?name=${searchTerm}`);
+      const response = await fetch(`/schedule/searchSchedule?name=${searchTerm}`);
       const data = await response.json();
       console.log(data);
       setSearchResults(Array.isArray(data) ? data : [data]);
@@ -19,13 +20,13 @@ function SearchEmployee() {
   };
 
   useEffect(() => {
-    const fetchEmployees = async () => {
-        const employeeData = await fetch('/employee');
-        const employeeJson = await employeeData.json();
-        console.log(employeeJson);
-        setAllEmployees(employeeJson);
+    const fetchSchedules = async () => {
+        const scheduleData = await fetch('/schedule');
+        const scheduleJson = await scheduleData.json();
+        console.log(scheduleJson);
+        setAllSchedules(scheduleJson);
     };
-    fetchEmployees();
+    fetchSchedules();
   }, []);
 
   const handleInputChange = (event) => {
@@ -45,17 +46,17 @@ function SearchEmployee() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <br />
       <Autocomplete
-            id="search-employees"
+            id="search-schedules"
             style={{ width: '50%'}}
             disablePortal
-            options={allEmployees}
+            options={allSchedules}
             getOptionLabel={option => option.name}
-            value={allEmployees.find(employee => employee.name === searchTerm) || null}
+            value={allSchedules.find(schedule => schedule.name === searchTerm) || null}
             onChange={handleAutocompleteChange}
             renderInput={params => (
             <TextField
                 {...params}
-                label="Search Employees"
+                label="Search Schedules"
                 margin='normal'
                 variant="outlined"
                 fullWidth
@@ -72,17 +73,37 @@ function SearchEmployee() {
         <Card key={result._id} style={{ width: '80%', margin: '1rem 0' }}>
           <h3 style={{ margin: '0.5rem' }}>{result.name}</h3>
           <TableContainer component={Paper}>
-            <Table aria-label="employee attributes">
+            <Table aria-label="schedule attributes">
               <TableBody>
                 <TableRow>
-                  <TableCell component="th" scope="row">Email:</TableCell>
+                  <TableCell component="th" scope="row">Mail Subject:</TableCell>
                   <TableCell align="left">
-                        {result.email}
+                        {result.mailSubject}
                   </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell component="th" scope="row">Recipients:</TableCell>
+                  <TableCell align="left">
+                          <Button variant='outlined' onClick={() => setShowModal(!showModal)}>Show Recipients</Button>
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell component="th" scope="row">Triggers:</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
+          <Modal open={showModal} onClose={() => setShowModal(false)}>
+            <div style={{ padding: '1rem' }}>
+                <pre>
+                  <ul>
+                    {result.recipients.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </pre>
+            </div>
+          </Modal>
         </Card>
       ))}
       </div>
@@ -90,4 +111,4 @@ function SearchEmployee() {
   );
 }
 
-export default SearchEmployee;
+export default SearchSchedule;

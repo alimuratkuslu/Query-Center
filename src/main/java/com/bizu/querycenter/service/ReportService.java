@@ -56,6 +56,7 @@ public class ReportService {
         Report report = Report.builder()
                 ._id(size)
                 .name(request.getName())
+                .sqlQuery(request.getSqlQuery())
                 .employees(employees)
                 .build();
 
