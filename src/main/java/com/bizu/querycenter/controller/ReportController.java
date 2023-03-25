@@ -1,7 +1,9 @@
 package com.bizu.querycenter.controller;
 
-import com.bizu.querycenter.dto.*;
-import com.bizu.querycenter.model.Employee;
+import com.bizu.querycenter.dto.Add.AddQueryToReport;
+import com.bizu.querycenter.dto.Add.AddScheduleToReport;
+import com.bizu.querycenter.dto.Request.SaveReportRequest;
+import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.ReportService;
 import org.springframework.http.ResponseEntity;

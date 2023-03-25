@@ -1,13 +1,13 @@
 package com.bizu.querycenter.service;
 
-import com.bizu.querycenter.dto.AddTriggerToSchedule;
-import com.bizu.querycenter.dto.ReportResponse;
-import com.bizu.querycenter.dto.SaveScheduleRequest;
-import com.bizu.querycenter.dto.ScheduleResponse;
+import com.bizu.querycenter.dto.Add.AddTriggerToSchedule;
+import com.bizu.querycenter.dto.Request.SaveScheduleRequest;
+import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.model.Trigger;
 import com.bizu.querycenter.repository.ScheduleRepository;
+import com.bizu.querycenter.repository.TriggerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,10 +17,12 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final TriggerRepository triggerRepository;
     private final TriggerService triggerService;
 
-    public ScheduleService(ScheduleRepository scheduleRepository, TriggerService triggerService) {
+    public ScheduleService(ScheduleRepository scheduleRepository, TriggerRepository triggerRepository, TriggerService triggerService) {
         this.scheduleRepository = scheduleRepository;
+        this.triggerRepository = triggerRepository;
         this.triggerService = triggerService;
     }
 
@@ -80,9 +82,16 @@ public class ScheduleService {
         Schedule schedule = getScheduleById(scheduleDto.getScheduleId());
         Trigger trigger = triggerService.getTriggerById(scheduleDto.getTriggerId());
         List<Trigger> triggers = schedule.getTriggers();
-        triggers.add(trigger);
+        List<Schedule> schedules = trigger.getSchedules();
 
+        triggers.add(trigger);
         schedule.setTriggers(triggers);
+
+        schedules.add(schedule);
+        trigger.setSchedules(schedules);
+
+        scheduleRepository.save(schedule);
+        triggerRepository.save(trigger);
 
         return ScheduleResponse.builder()
                 .name(schedule.getName())

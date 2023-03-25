@@ -1,5 +1,6 @@
-package com.bizu.querycenter.dto;
+package com.bizu.querycenter.dto.Request;
 
+import com.bizu.querycenter.model.Schedule;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,12 +12,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SaveScheduleRequest {
-
+public class SaveTriggerRequest {
 
     private String name;
-
-    private String mailSubject;
-
-    private List<String> recipients;
+    private List<Schedule> schedules;
 }

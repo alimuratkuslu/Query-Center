@@ -1,8 +1,9 @@
 package com.bizu.querycenter.controller;
 
-import com.bizu.querycenter.dto.AddReportToEmployee;
-import com.bizu.querycenter.dto.EmployeeResponse;
-import com.bizu.querycenter.dto.SaveEmployeeRequest;
+import com.bizu.querycenter.dto.Add.AddReportToEmployee;
+import com.bizu.querycenter.dto.ReportToEmployee;
+import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
+import com.bizu.querycenter.dto.Response.EmployeeResponse;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,11 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<EmployeeResponse> saveEmployee(@RequestBody SaveEmployeeRequest request){
         return ResponseEntity.ok(employeeService.saveEmployee(request));
+    }
+
+    @PostMapping("/addReport")
+    public ResponseEntity<EmployeeResponse> addReportToEmployee(@RequestBody ReportToEmployee request){
+        return ResponseEntity.ok(employeeService.addReportToEmployee(request));
     }
 
     @PostMapping("/giveOwnership/{employeeId}")

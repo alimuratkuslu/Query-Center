@@ -1,7 +1,6 @@
 package com.bizu.querycenter.controller;
 
-import com.bizu.querycenter.dto.SaveOwnershipRequest;
-import com.bizu.querycenter.model.Report;
+import com.bizu.querycenter.dto.Request.SaveOwnershipRequest;
 import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.service.ReportOwnershipService;
 import org.springframework.http.ResponseEntity;

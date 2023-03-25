@@ -46,6 +46,9 @@ const Dashboard = () => {
           <ListItem button component={Link} to="/trigger">
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Triggers" />
           </ListItem>
+          <ListItem button component={Link} to="/searchReport">
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Search Reports" />
+          </ListItem>
         </List>
       </Drawer>
       <Box textAlign='center'>

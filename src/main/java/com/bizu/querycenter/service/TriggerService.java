@@ -1,10 +1,7 @@
 package com.bizu.querycenter.service;
 
-import com.bizu.querycenter.dto.SaveScheduleRequest;
-import com.bizu.querycenter.dto.SaveTriggerRequest;
-import com.bizu.querycenter.dto.ScheduleResponse;
-import com.bizu.querycenter.dto.TriggerResponse;
-import com.bizu.querycenter.model.Schedule;
+import com.bizu.querycenter.dto.Request.SaveTriggerRequest;
+import com.bizu.querycenter.dto.Response.TriggerResponse;
 import com.bizu.querycenter.model.Trigger;
 import com.bizu.querycenter.repository.TriggerRepository;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.bizu.querycenter.dto;
+package com.bizu.querycenter.dto.Request;
 
 import lombok.Builder;
 import lombok.Data;

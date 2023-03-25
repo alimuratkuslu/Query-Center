@@ -1,8 +1,8 @@
 package com.bizu.querycenter.controller;
 
-import com.bizu.querycenter.dto.AddTriggerToSchedule;
-import com.bizu.querycenter.dto.SaveScheduleRequest;
-import com.bizu.querycenter.dto.ScheduleResponse;
+import com.bizu.querycenter.dto.Add.AddTriggerToSchedule;
+import com.bizu.querycenter.dto.Request.SaveScheduleRequest;
+import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.service.ScheduleService;
 import org.springframework.http.ResponseEntity;

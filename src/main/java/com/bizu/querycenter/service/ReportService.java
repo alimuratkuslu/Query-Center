@@ -1,13 +1,14 @@
 package com.bizu.querycenter.service;
 
-import com.bizu.querycenter.dto.AddQueryToReport;
-import com.bizu.querycenter.dto.AddScheduleToReport;
-import com.bizu.querycenter.dto.ReportResponse;
-import com.bizu.querycenter.dto.SaveReportRequest;
+import com.bizu.querycenter.dto.Add.AddQueryToReport;
+import com.bizu.querycenter.dto.Add.AddScheduleToReport;
+import com.bizu.querycenter.dto.Response.ReportResponse;
+import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.repository.ReportRepository;
+import com.bizu.querycenter.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,10 +18,13 @@ import java.util.List;
 public class ReportService {
 
     private final ReportRepository reportRepository;
+
+    private final ScheduleRepository scheduleRepository;
     private final ScheduleService scheduleService;
 
-    public ReportService(ReportRepository reportRepository, ScheduleService scheduleService) {
+    public ReportService(ReportRepository reportRepository, ScheduleRepository scheduleRepository, ScheduleService scheduleService) {
         this.reportRepository = reportRepository;
+        this.scheduleRepository = scheduleRepository;
         this.scheduleService = scheduleService;
     }
 
@@ -79,9 +83,16 @@ public class ReportService {
         Report report = getReportById(reportDto.getReportId());
         Schedule schedule = scheduleService.getScheduleById(reportDto.getScheduleId());
         List<Schedule> schedules = report.getSchedules();
-        schedules.add(schedule);
+        List<Report> reports = schedule.getReports();
 
+        reports.add(report);
+        schedule.setReports(reports);
+
+        schedules.add(schedule);
         report.setSchedules(schedules);
+
+        scheduleRepository.save(schedule);
+        reportRepository.save(report);
 
         return ReportResponse.builder()
                 .name(report.getName())
