@@ -29,6 +29,11 @@ public class ReportController {
         return ResponseEntity.ok(reportService.getAllReports());
     }
 
+    @GetMapping("/searchReport")
+    public ResponseEntity<Report> getReportByName(@RequestParam String name){
+        return ResponseEntity.ok(reportService.getReportByName(name));
+    }
+
     @PostMapping
     public ResponseEntity<ReportResponse> saveReport(@RequestBody SaveReportRequest request){
         return ResponseEntity.ok(reportService.saveReport(request));

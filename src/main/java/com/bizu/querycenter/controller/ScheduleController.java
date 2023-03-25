@@ -40,7 +40,7 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.updateSchedule(id, request));
     }
 
-    @PostMapping
+    @PostMapping("/addTrigger")
     public ResponseEntity<ScheduleResponse> addTriggerToSchedule(@RequestBody AddTriggerToSchedule request){
         return ResponseEntity.ok(scheduleService.addTriggerToSchedule(request));
     }

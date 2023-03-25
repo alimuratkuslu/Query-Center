@@ -1,88 +1,65 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-/*
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-*/
+import React, { useState } from 'react';
+import { Box, Button, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import EmployeeList from './EmployeeList';
+import { Link } from 'react-router-dom';
+import IconButton from '@material-ui/core/IconButton';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
-export default function TemporaryDrawer() {
-  const [state, setState] = React.useState({
-    top: false,
-    left: false,
-    bottom: false,
-    right: false,
-  });
 
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
+const Dashboard = () => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-    setState({ ...state, [anchor]: open });
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
   };
 
-  const list = (anchor) => (
-    <Box
-      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {['Reports', 'Schedules', 'Contact', 'Help'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-    </Box>
-  );
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
 
   return (
     <div>
-      {['Navbar'].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
-          <Drawer
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-          >
-            {list(anchor)}
-          </Drawer>
-        </React.Fragment>
-      ))}
+      <h1 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}> Query Center </h1>
+      <IconButton onClick={drawerOpen ? handleDrawerClose : handleDrawerOpen}>
+        {drawerOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+      </IconButton>
+      <Drawer
+        variant="persistent"
+        anchor="left"
+        PaperProps={{
+          sx: {width: "20%"},
+        }}
+        open={drawerOpen}
+      >
+        <div/>
+        <List>
+          <ListItem button component={Link} to="/employee">
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Employees" />
+          </ListItem>
+          <ListItem button component={Link} to="/report">
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Reports" />
+          </ListItem>
+          <ListItem button component={Link} to="/schedule">
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Schedules" />
+          </ListItem>
+          <ListItem button component={Link} to="/trigger">
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Triggers" />
+          </ListItem>
+        </List>
+      </Drawer>
+      <Box textAlign='center'>
+        <Button variant='contained' onClick={() => {
+          if(drawerOpen == false){
+            setDrawerOpen(true);
+          }
+          else{
+            setDrawerOpen(false);
+          }
+        }}> Toggle Navbar</Button>
+      </Box>
     </div>
   );
-}
+};
 
-
-
-/*
-<List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-*/
+export default Dashboard;

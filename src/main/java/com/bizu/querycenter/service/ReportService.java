@@ -30,6 +30,12 @@ public class ReportService {
         return report;
     }
 
+    public Report getReportByName(String reportName){
+        Report report = reportRepository.findByName(reportName);
+
+        return report;
+    }
+
     public List<Report> getAllReports(){
         List<Report> reports = new ArrayList<>();
         reportRepository.findAll().forEach(reports::add);
