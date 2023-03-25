@@ -57,6 +57,7 @@ public class ScheduleService {
                 .name(request.getName())
                 .mailSubject(request.getMailSubject())
                 .recipients(request.getRecipients())
+                .triggers(request.getTriggers())
                 .reports(reports)
                 .build();
 

@@ -95,7 +95,7 @@ function SearchReport() {
             </Table>
           </TableContainer>
           <Modal open={showModal} onClose={() => setShowModal(false)}>
-            <div style={{ padding: '1rem' }}>
+            <div style={{ padding: '1rem', fontSize: '26px' }}>
                 <pre>{result.sqlQuery}</pre>
             </div>
           </Modal>

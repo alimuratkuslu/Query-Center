@@ -89,12 +89,19 @@ function SearchSchedule() {
                 </TableRow>
                 <TableRow>
                   <TableCell component="th" scope="row">Triggers:</TableCell>
+                  <TableCell align="left">
+                    <ul style={{ margin: 0, paddingInlineStart: '1rem' }}>
+                      {result.triggers.map(trigger => (
+                        <li key={trigger._id}>{trigger.name}</li>
+                      ))}
+                    </ul>
+                  </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
           <Modal open={showModal} onClose={() => setShowModal(false)}>
-            <div style={{ padding: '1rem' }}>
+            <div style={{ padding: '1rem', fontSize: '26px' }}>
                 <pre>
                   <ul>
                     {result.recipients.map((item, index) => (

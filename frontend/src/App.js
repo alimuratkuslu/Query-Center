@@ -9,7 +9,7 @@ import AddEmployee from './components/AddEmployee';
 import AddReport from './components/AddReport';
 import AddSchedule from './components/AddSchedule';
 import AddTrigger from './components/AddTrigger';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (

@@ -11,22 +11,24 @@ const columns = [
   { field: 'name', headerName: 'Schedule Name', width: 130 },
   { field: 'mailSubject', headerName: 'Mail Subject', width: 130 },
   { field: 'recipients', headerName: 'Recipients', width: 600 },
-  /*
   {
     field: 'triggers',
     headerName: 'Triggers',
     width: 600,
     renderCell: (params) => (
       <div style={{ display: 'flex'}}>
-        {params.row.triggers.map((trigger) => (
-          <div key={trigger._id} style={{ marginRight: '10px'}}>
-            {trigger.name}
-          </div>
-        ))}
+        {params.row.triggers && params.row.triggers.length > 0 ? (
+            params.row.triggers.map((trigger) => (
+              <div key={trigger._id} style={{ marginRight: '10px'}}>
+                {trigger.name}
+              </div>
+            ))
+          ) : (
+            <div>No triggers found</div>
+          )}
       </div>
     ),
   },
-  */
 ];
 
 const getRowId = (row) => row._id;

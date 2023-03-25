@@ -1,5 +1,6 @@
 package com.bizu.querycenter.dto.Request;
 
+import com.bizu.querycenter.model.Trigger;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,4 +20,6 @@ public class SaveScheduleRequest {
     private String mailSubject;
 
     private List<String> recipients;
+
+    private List<Trigger> triggers;
 }

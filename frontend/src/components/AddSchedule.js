@@ -9,6 +9,8 @@ const AddSchedule = () => {
   const [recipients, setRecipients] = useState([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [employees, setEmployees] = useState([]);
+  const [triggers, setTriggers] = useState([]);
+  const [selectedTriggers, setSelectedTriggers] = useState([]);
 
   useEffect(() => {
 
@@ -20,13 +22,21 @@ const AddSchedule = () => {
     };
     fetchEmployees();
 
+    const fetchTriggers = async () => {
+        const triggerData = await fetch('/trigger');
+        const triggerJson = await triggerData.json();
+        console.log(triggerJson);
+        setTriggers(triggerJson);
+    };
+    fetchTriggers();
+
   }, []);
 
   const handleSubmit = async (e) => {
     setShowSuccessMessage(true);
     e.preventDefault();
       const recipientNames = recipients.map((recipient) => recipient.name);
-      const response = await axios.post('/schedule', { name, mailSubject, recipients: recipientNames });
+      const response = await axios.post('/schedule', { name, mailSubject, recipients: recipientNames, triggers: selectedTriggers });
       setName('');
       setMailSubject('');
       setRecipients([]);
@@ -78,6 +88,28 @@ const AddSchedule = () => {
                         <TextField 
                         {...params} 
                         label="Pick Recipients"
+                        margin='normal'
+                        style={{ width: '300px'}}
+                        variant="outlined" 
+                    />
+                    )}
+                />
+            </div>
+            <br />
+            <div>
+                <Autocomplete
+                    multiple
+                    id="search-triggers"
+                    style={{ width: '100%'}}
+                    disablePortal
+                    options={triggers}
+                    getOptionLabel={option => option.name}
+                    value={selectedTriggers}
+                    onChange={(event, value) => setSelectedTriggers(value)}
+                    renderInput={(params) => (
+                        <TextField 
+                        {...params} 
+                        label="Pick Triggers"
                         margin='normal'
                         style={{ width: '300px'}}
                         variant="outlined" 
