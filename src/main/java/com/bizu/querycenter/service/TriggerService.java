@@ -2,6 +2,7 @@ package com.bizu.querycenter.service;
 
 import com.bizu.querycenter.dto.Request.SaveTriggerRequest;
 import com.bizu.querycenter.dto.Response.TriggerResponse;
+import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.model.Trigger;
 import com.bizu.querycenter.repository.TriggerRepository;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,12 @@ public class TriggerService {
         triggerRepository.findAll().forEach(triggers::add);
 
         return triggers;
+    }
+
+    public Trigger getTriggerByName(String triggerName){
+        Trigger trigger = triggerRepository.findByName(triggerName);
+
+        return trigger;
     }
 
     public TriggerResponse saveTrigger(SaveTriggerRequest request){

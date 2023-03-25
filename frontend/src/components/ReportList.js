@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import Dashboard from './Dashboard';
+import SearchReport from './SearchReport';
 
 const columns = [
   { field: '_id', headerName: 'ID', width: 70 },
@@ -38,7 +40,10 @@ const ReportList = () => {
   }, []);
 
   return (
-    <div style={{ height: 700, width: '100%' }}>
+    <div style={{ height: 500, width: '100%' }}>
+      <Dashboard />
+      <SearchReport />
+      <br />
       <DataGrid rows={reports} columns={columns} getRowId={getRowId} pageSize={5} />
     </div>
   );

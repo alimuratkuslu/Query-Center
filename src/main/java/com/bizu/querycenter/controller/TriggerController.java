@@ -2,6 +2,7 @@ package com.bizu.querycenter.controller;
 
 import com.bizu.querycenter.dto.Request.SaveTriggerRequest;
 import com.bizu.querycenter.dto.Response.TriggerResponse;
+import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.model.Trigger;
 import com.bizu.querycenter.service.TriggerService;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,11 @@ public class TriggerController {
     @GetMapping
     public ResponseEntity<List<Trigger>> getAllTriggers(){
         return ResponseEntity.ok(triggerService.getAllTriggers());
+    }
+
+    @GetMapping("/searchTrigger")
+    public ResponseEntity<Trigger> getTriggerByName(@RequestParam String name){
+        return ResponseEntity.ok(triggerService.getTriggerByName(name));
     }
 
     @PostMapping

@@ -3,6 +3,7 @@ package com.bizu.querycenter.controller;
 import com.bizu.querycenter.dto.Add.AddTriggerToSchedule;
 import com.bizu.querycenter.dto.Request.SaveScheduleRequest;
 import com.bizu.querycenter.dto.Response.ScheduleResponse;
+import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.service.ScheduleService;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,11 @@ public class ScheduleController {
     @GetMapping
     public ResponseEntity<List<Schedule>> getAllSchedules(){
         return ResponseEntity.ok(scheduleService.getAllSchedules());
+    }
+
+    @GetMapping("/searchSchedule")
+    public ResponseEntity<Schedule> getScheduleByName(@RequestParam String name){
+        return ResponseEntity.ok(scheduleService.getScheduleByName(name));
     }
 
     @PostMapping

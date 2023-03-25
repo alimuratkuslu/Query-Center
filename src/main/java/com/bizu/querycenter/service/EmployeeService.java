@@ -43,6 +43,12 @@ public class EmployeeService {
         return employees;
     }
 
+    public Employee getEmployeeByName(String employeeName){
+        Employee employee = employeeRepository.findByName(employeeName);
+
+        return employee;
+    }
+
     public EmployeeResponse saveEmployee(SaveEmployeeRequest request){
 
         List<Employee> employees = getAllEmployees();

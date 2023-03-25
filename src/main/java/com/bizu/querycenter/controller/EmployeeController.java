@@ -5,6 +5,7 @@ import com.bizu.querycenter.dto.ReportToEmployee;
 import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
 import com.bizu.querycenter.dto.Response.EmployeeResponse;
 import com.bizu.querycenter.model.Employee;
+import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.EmployeeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,11 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<List<Employee>> getAllEmployees(){
         return ResponseEntity.ok(employeeService.getAllEmployees());
+    }
+
+    @GetMapping("/searchEmployee")
+    public ResponseEntity<Employee> getEmployeeByName(@RequestParam String name){
+        return ResponseEntity.ok(employeeService.getEmployeeByName(name));
     }
 
     @PostMapping

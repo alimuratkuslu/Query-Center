@@ -3,6 +3,7 @@ package com.bizu.querycenter.service;
 import com.bizu.querycenter.dto.Add.AddTriggerToSchedule;
 import com.bizu.querycenter.dto.Request.SaveScheduleRequest;
 import com.bizu.querycenter.dto.Response.ScheduleResponse;
+import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.model.Trigger;
@@ -37,6 +38,12 @@ public class ScheduleService {
         scheduleRepository.findAll().forEach(schedules::add);
 
         return schedules;
+    }
+
+    public Schedule getScheduleByName(String scheduleName){
+        Schedule schedule = scheduleRepository.findByName(scheduleName);
+
+        return schedule;
     }
 
     public ScheduleResponse saveSchedule(SaveScheduleRequest request){

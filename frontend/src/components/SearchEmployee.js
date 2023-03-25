@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
-import Dashboard from './Dashboard';
 
-function SearchReport() {
+function SearchEmployee() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [allReports, setAllReports] = useState([]);
+  const [allEmployees, setAllEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`/report/searchReport?name=${searchTerm}`);
+      const response = await fetch(`/employee/searchEmployee?name=${searchTerm}`);
       const data = await response.json();
       console.log(data);
       setSearchResults(Array.isArray(data) ? data : [data]);
@@ -21,13 +20,13 @@ function SearchReport() {
   };
 
   useEffect(() => {
-    const fetchReports = async () => {
-        const reportData = await fetch('/report');
-        const reportJson = await reportData.json();
-        console.log(reportJson);
-        setAllReports(reportJson);
+    const fetchEmployees = async () => {
+        const employeeData = await fetch('/employee');
+        const employeeJson = await employeeData.json();
+        console.log(employeeJson);
+        setAllEmployees(employeeJson);
     };
-    fetchReports();
+    fetchEmployees();
   }, []);
 
   const handleInputChange = (event) => {
@@ -47,17 +46,17 @@ function SearchReport() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <br />
       <Autocomplete
-            id="search-reports"
+            id="search-employees"
             style={{ width: '50%'}}
             disablePortal
-            options={allReports}
+            options={allEmployees}
             getOptionLabel={option => option.name}
-            value={allReports.find(report => report.name === searchTerm) || null}
+            value={allEmployees.find(employee => employee.name === searchTerm) || null}
             onChange={handleAutocompleteChange}
             renderInput={params => (
             <TextField
                 {...params}
-                label="Search Reports"
+                label="Search Employees"
                 margin='normal'
                 variant="outlined"
                 fullWidth
@@ -74,32 +73,17 @@ function SearchReport() {
         <Card key={result._id} style={{ width: '80%', margin: '1rem 0' }}>
           <h3 style={{ margin: '0.5rem' }}>{result.name}</h3>
           <TableContainer component={Paper}>
-            <Table aria-label="report attributes">
+            <Table aria-label="employee attributes">
               <TableBody>
                 <TableRow>
-                  <TableCell component="th" scope="row">SQL Query:</TableCell>
+                  <TableCell component="th" scope="row">Email:</TableCell>
                   <TableCell align="left">
-                        <Button variant='outlined' onClick={() => setShowModal(!showModal)}>Show Query</Button>
-                    </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell component="th" scope="row">Employees:</TableCell>
-                  <TableCell align="left">
-                    <ul style={{ margin: 0, paddingInlineStart: '1rem' }}>
-                      {result.employees.map(employee => (
-                        <li key={employee._id}>{employee.name}</li>
-                      ))}
-                    </ul>
+                        {result.email}
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
-          <Modal open={showModal} onClose={() => setShowModal(false)}>
-            <div style={{ padding: '1rem' }}>
-                <pre>{result.sqlQuery}</pre>
-            </div>
-          </Modal>
         </Card>
       ))}
       </div>
@@ -107,4 +91,4 @@ function SearchReport() {
   );
 }
 
-export default SearchReport;
+export default SearchEmployee;
