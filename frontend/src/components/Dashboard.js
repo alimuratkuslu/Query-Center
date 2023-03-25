@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import EmployeeList from './EmployeeList';
+import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { Link } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -10,6 +9,7 @@ import SummarizeIcon from '@mui/icons-material/Summarize';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CopyrightIcon from '@mui/icons-material/Copyright';
 
 const Dashboard = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -66,6 +66,12 @@ const Dashboard = () => {
               <ScheduleIcon />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Triggers" />
+          </ListItem>
+          <ListItem button component={Link} to="/ownership">
+            <ListItemIcon>
+              <CopyrightIcon />
+            </ListItemIcon>
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Ownerships" />
           </ListItem>
           <ListItem button component={Link} to="/searchReport">
             <ListItemIcon>

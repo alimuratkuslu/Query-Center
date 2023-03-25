@@ -30,7 +30,7 @@ const TriggerList = () => {
   }, []);
 
   return (
-    <div style={{ height: 600, width: '100%' }}>
+    <div>
       <Dashboard />
       <SearchTrigger />
 
@@ -40,7 +40,11 @@ const TriggerList = () => {
         </IconButton>
       </Link>
       <br />
-      <DataGrid rows={triggers} columns={columns} getRowId={getRowId} pageSize={5} />
+      <div style={{ height: '65vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <div style={{width: '80%', height: 600}}>
+          <DataGrid rows={triggers} columns={columns} getRowId={getRowId} pageSize={5} />
+        </div>
+      </div>
     </div>
   );
 };

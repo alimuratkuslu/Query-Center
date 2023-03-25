@@ -28,6 +28,11 @@ public class ReportOwnershipController {
         return ResponseEntity.ok(service.getAllOwnerships());
     }
 
+    @GetMapping("/searchOwnership")
+    public ResponseEntity<ReportOwnership> getOwnershipByName(@RequestParam String name){
+        return ResponseEntity.ok(service.getOwnershipByName(name));
+    }
+
     @PostMapping
     public ResponseEntity<ReportOwnership> saveOwnership(@RequestBody SaveOwnershipRequest request){
         return ResponseEntity.ok(service.saveOwnership(request));

@@ -1,6 +1,7 @@
 package com.bizu.querycenter.service;
 
 import com.bizu.querycenter.dto.Request.SaveOwnershipRequest;
+import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.repository.ReportOwnershipRepository;
 import org.springframework.stereotype.Service;
@@ -13,12 +14,37 @@ public class ReportOwnershipService {
 
     private final ReportOwnershipRepository repository;
 
-    public ReportOwnershipService(ReportOwnershipRepository repository) {
+    private final ReportService reportService;
+
+    public ReportOwnershipService(ReportOwnershipRepository repository, ReportService reportService) {
         this.repository = repository;
+        this.reportService = reportService;
     }
 
     public ReportOwnership getReportOwnershipById(Integer id){
         ReportOwnership ownership = repository.findById(id).orElseThrow(RuntimeException::new);
+
+        return ownership;
+    }
+
+    public ReportOwnership getOwnershipByName(String reportName){
+        List<Report> reports = reportService.getAllReports();
+        Report report = null;
+
+        for (int i = 0; i < reports.size(); i++) {
+            if(reports.get(i).getName() == reportName){
+                report = reports.get(i);
+            }
+        }
+
+        List<ReportOwnership> ownerships = getAllOwnerships();
+        ReportOwnership ownership = null;
+
+        for(int i = 0; i < ownerships.size(); i++){
+            if(ownerships.get(i).getReport() == report){
+                ownership = ownerships.get(i);
+            }
+        }
 
         return ownership;
     }
