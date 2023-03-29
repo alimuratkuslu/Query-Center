@@ -1,6 +1,9 @@
 package com.bizu.querycenter.service;
 
+import com.bizu.querycenter.dto.Add.AddNameToTrigger;
+import com.bizu.querycenter.dto.Add.AddSubjectToSchedule;
 import com.bizu.querycenter.dto.Request.SaveTriggerRequest;
+import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.dto.Response.TriggerResponse;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.model.Trigger;
@@ -53,6 +56,17 @@ public class TriggerService {
 
         return TriggerResponse.builder()
                 .name(fromDB.getName())
+                .build();
+    }
+
+    public TriggerResponse addName(Integer triggerId, AddNameToTrigger name){
+        Trigger t1 = getTriggerById(triggerId);
+
+        t1.setName(name.getName());
+        triggerRepository.save(t1);
+
+        return TriggerResponse.builder()
+                .name(t1.getName())
                 .build();
     }
 

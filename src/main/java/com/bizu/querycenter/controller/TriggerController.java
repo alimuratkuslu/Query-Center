@@ -1,6 +1,9 @@
 package com.bizu.querycenter.controller;
 
+import com.bizu.querycenter.dto.Add.AddNameToTrigger;
+import com.bizu.querycenter.dto.Add.AddSubjectToSchedule;
 import com.bizu.querycenter.dto.Request.SaveTriggerRequest;
+import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.dto.Response.TriggerResponse;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.model.Trigger;
@@ -38,6 +41,11 @@ public class TriggerController {
     @PostMapping
     public ResponseEntity<TriggerResponse> saveTrigger(@RequestBody SaveTriggerRequest request){
         return ResponseEntity.ok(triggerService.saveTrigger(request));
+    }
+
+    @PostMapping("/addName/{triggerId}")
+    public ResponseEntity<TriggerResponse> addNameToTrigger(@PathVariable Integer triggerId, @RequestBody AddNameToTrigger request){
+        return ResponseEntity.ok(triggerService.addName(triggerId, request));
     }
 
     @PutMapping("/{id}")
