@@ -1,7 +1,10 @@
 package com.bizu.querycenter.service;
 
+import com.bizu.querycenter.dto.Add.AddQueryToReport;
+import com.bizu.querycenter.dto.Add.AddSubjectToSchedule;
 import com.bizu.querycenter.dto.Add.AddTriggerToSchedule;
 import com.bizu.querycenter.dto.Request.SaveScheduleRequest;
+import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
@@ -68,6 +71,20 @@ public class ScheduleService {
                 .mailSubject(fromDB.getMailSubject())
                 .recipients(fromDB.getRecipients())
                 .triggers(fromDB.getTriggers())
+                .build();
+    }
+
+    public ScheduleResponse addSchedule(Integer scheduleId, AddSubjectToSchedule schedule){
+        Schedule s1 = getScheduleById(scheduleId);
+
+        s1.setMailSubject(schedule.getSubject());
+        scheduleRepository.save(s1);
+
+        return ScheduleResponse.builder()
+                .name(s1.getName())
+                .mailSubject(s1.getMailSubject())
+                .recipients(s1.getRecipients())
+                .triggers(s1.getTriggers())
                 .build();
     }
 

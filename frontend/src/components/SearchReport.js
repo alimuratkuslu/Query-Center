@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
+import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
 
 function SearchReport() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [allReports, setAllReports] = useState([]);
+  const [selectedReport, setSelectedReport] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [newQuery, setNewQuery] = useState('');
+  const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
 
   const handleSearch = async () => {
     try {
       const response = await fetch(`/report/searchReport?name=${searchTerm}`);
       const data = await response.json();
-      console.log(data);
+      setSelectedReport(data._id);
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
@@ -23,7 +27,7 @@ function SearchReport() {
     const fetchReports = async () => {
         const reportData = await fetch('/report');
         const reportJson = await reportData.json();
-        console.log(reportJson);
+        console.log(selectedReport);
         setAllReports(reportJson);
     };
     fetchReports();
@@ -38,6 +42,24 @@ function SearchReport() {
       setSearchTerm(value.name);
     } else {
       setSearchTerm("");
+    }
+  };
+
+  const handleQueryUpdate = async () => {
+    try {
+      const response = await fetch(`/report/addQuery/${selectedReport}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ query: newQuery })
+      });
+      const data = await response.json();
+      setUpdateModalOpen(false);
+      setShowUpdateSuccess(true);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -77,10 +99,30 @@ function SearchReport() {
               <TableBody>
                 <TableRow>
                   <TableCell component="th" scope="row">SQL Query:</TableCell>
-                    <TableCell align="left">
-                          <Button variant='outlined' onClick={() => setShowModal(!showModal)}>Show Query</Button>
+                    <TableCell align="left" style={{display: 'flex', justifyContent: 'space-between'}}>
+                          <Button variant='outlined' style={{flex: 1}} onClick={() => setShowModal(!showModal)}>Show Query</Button>
+                          <Button variant='outlined' style={{ flex: 1, marginLeft: '8px' }} onClick={() => setUpdateModalOpen(true)}>Update Query</Button>
+                          <Modal open={updateModalOpen} onClose={() => setUpdateModalOpen(false)}>
+                            <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 4, p: 4, bgcolor: 'background.paper'}}>
+                              <TextField label="New SQL Query" multiline rows={4} variant="outlined" value={newQuery} onChange={(e) => setNewQuery(e.target.value)} />
+                              <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => handleQueryUpdate()}>Save</Button>
+                              <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => setUpdateModalOpen(false)}>Cancel</Button>
+                            </Box>
+                          </Modal>
+                          {showUpdateSuccess && (
+                            <Snackbar
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                                open={showUpdateSuccess}
+                                autoHideDuration={3000}
+                                onClose={() => setShowUpdateSuccess(false)}
+                            >
+                                <Alert severity="success" onClose={() => setShowUpdateSuccess(false)}>
+                                    Query Successfully Updated
+                                </Alert>
+                            </Snackbar>
+                          )}
                     </TableCell>
-                </TableRow>
+                </TableRow>                
                 <TableRow>
                   <TableCell component="th" scope="row">Employees:</TableCell>
                   <TableCell align="left">
@@ -95,9 +137,14 @@ function SearchReport() {
             </Table>
           </TableContainer>
           <Modal open={showModal} onClose={() => setShowModal(false)}>
-            <div style={{ padding: '1rem', fontSize: '26px' }}>
-                <pre>{result.sqlQuery}</pre>
-            </div>
+            <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 24, p: 4, bgcolor: 'background.paper'}}>
+              <Typography variant='h6' component='h2'>
+                SQL Query
+              </Typography>
+              <Typography sx={{ mt: 2 }}>
+                {result.sqlQuery}
+              </Typography>
+            </Box>
           </Modal>
         </Card>
       ))}

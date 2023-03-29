@@ -55,7 +55,7 @@ const ReportList = () => {
       </Link>
       <br />
       <div style={{ height: '65vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <div style={{width: '80%', height: 600}}>
+        <div style={{width: '80%', height: 450}}>
           <DataGrid rows={reports} columns={columns} getRowId={getRowId} pageSize={5} />
         </div>
       </div>

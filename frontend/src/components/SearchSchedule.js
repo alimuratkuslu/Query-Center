@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete } from '@mui/material';
+import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
 
 function SearchSchedule() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [allSchedules, setAllSchedules] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [newMail, setNewMail] = useState('');
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
 
   const handleSearch = async () => {
     try {
       const response = await fetch(`/schedule/searchSchedule?name=${searchTerm}`);
       const data = await response.json();
+      setSelectedSchedule(data._id)
       console.log(data);
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
@@ -38,6 +43,24 @@ function SearchSchedule() {
       setSearchTerm(value.name);
     } else {
       setSearchTerm("");
+    }
+  };
+
+  const handleSubjectChange = async () => {
+    try {
+      const response = await fetch(`/schedule/addSubject/${selectedSchedule}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ subject: newMail })
+      });
+      const data = await response.json();
+      setUpdateModalOpen(false);
+      setShowUpdateSuccess(true);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -77,8 +100,32 @@ function SearchSchedule() {
               <TableBody>
                 <TableRow>
                   <TableCell component="th" scope="row">Mail Subject:</TableCell>
-                  <TableCell align="left">
-                        {result.mailSubject}
+                  <TableCell align="left" style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Box sx={{flex: 0.3}}>
+                      {result.mailSubject} 
+                    </Box>   
+                    <Box sx={{flex: 1, marginLeft: '8px'}}>
+                      <Button variant='outlined' style={{ flex: 1}} onClick={() => setUpdateModalOpen(true)}>Update Mail Subject</Button>
+                    </Box>
+                    <Modal open={updateModalOpen} onClose={() => setUpdateModalOpen(false)}>
+                      <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 4, p: 4, bgcolor: 'background.paper'}}>
+                        <TextField label="New Mail Subject" multiline rows={4} variant="outlined" value={newMail} onChange={(e) => setNewMail(e.target.value)} />
+                        <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => handleSubjectChange()}>Save</Button>
+                        <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => setUpdateModalOpen(false)}>Cancel</Button>
+                      </Box>
+                    </Modal>
+                    {showUpdateSuccess && (
+                      <Snackbar
+                          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                          open={showUpdateSuccess}
+                          autoHideDuration={3000}
+                          onClose={() => setShowUpdateSuccess(false)}
+                      >
+                          <Alert severity="success" onClose={() => setShowUpdateSuccess(false)}>
+                              Mail Subject Successfully Updated
+                          </Alert>
+                      </Snackbar>
+                    )}                                    
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -101,15 +148,18 @@ function SearchSchedule() {
             </Table>
           </TableContainer>
           <Modal open={showModal} onClose={() => setShowModal(false)}>
-            <div style={{ padding: '1rem', fontSize: '26px' }}>
-                <pre>
+            <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 24, p: 4, bgcolor: 'background.paper'}}>
+                <Typography variant='h6' component='h2'>
+                  Recipients
+                </Typography>
+                <Typography sx={{ mt: 2 }}>
                   <ul>
                     {result.recipients.map((item, index) => (
                       <li key={index}>{item}</li>
                     ))}
                   </ul>
-                </pre>
-            </div>
+                </Typography>
+            </Box>
           </Modal>
         </Card>
       ))}

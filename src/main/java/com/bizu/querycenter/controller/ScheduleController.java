@@ -1,7 +1,10 @@
 package com.bizu.querycenter.controller;
 
+import com.bizu.querycenter.dto.Add.AddQueryToReport;
+import com.bizu.querycenter.dto.Add.AddSubjectToSchedule;
 import com.bizu.querycenter.dto.Add.AddTriggerToSchedule;
 import com.bizu.querycenter.dto.Request.SaveScheduleRequest;
+import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Schedule;
@@ -39,6 +42,11 @@ public class ScheduleController {
     @PostMapping
     public ResponseEntity<ScheduleResponse> saveSchedule(@RequestBody SaveScheduleRequest request){
         return ResponseEntity.ok(scheduleService.saveSchedule(request));
+    }
+
+    @PostMapping("/addSubject/{scheduleId}")
+    public ResponseEntity<ScheduleResponse> addSubjectToSchedule(@PathVariable Integer scheduleId, @RequestBody AddSubjectToSchedule subject){
+        return ResponseEntity.ok(scheduleService.addSchedule(scheduleId, subject));
     }
 
     @PutMapping("/{id}")
