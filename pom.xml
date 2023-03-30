@@ -45,6 +45,11 @@
 		</dependency>
 		<!-->
 		<dependency>
+			<groupId>com.github.vincentrussell</groupId>
+			<artifactId>sql-to-mongo-db-query-converter</artifactId>
+			<version>1.21</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-mongodb</artifactId>
 		</dependency>

@@ -2,15 +2,26 @@ package com.bizu.querycenter.service;
 
 import com.bizu.querycenter.dto.Add.AddQueryToReport;
 import com.bizu.querycenter.dto.Add.AddScheduleToReport;
+import com.bizu.querycenter.dto.Request.SaveOwnershipRequest;
 import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
+import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.repository.ReportRepository;
 import com.bizu.querycenter.repository.ScheduleRepository;
+import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
+import com.github.vincentrussell.query.mongodb.sql.converter.ParseException;
+import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
+import org.bson.Document;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,6 +89,24 @@ public class ReportService {
                 .sqlQuery(report.getSqlQuery())
                 .employees(report.getEmployees())
                 .build();
+    }
+
+    public Document convertQuery(String sqlQuery) throws ParseException {
+        System.out.println("Input SQL query: " + sqlQuery);
+
+        QueryConverter queryConverter = new QueryConverter.Builder().sqlString(sqlQuery).build();
+        MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
+        String collection = mongoDBQueryHolder.getCollection();
+        Document query = mongoDBQueryHolder.getQuery();
+        Document projection = mongoDBQueryHolder.getProjection();
+        Document sort = mongoDBQueryHolder.getSort();
+
+        System.out.println("MongoDB query holder: " + mongoDBQueryHolder);
+        System.out.println("Collection: " + collection);
+        System.out.println("Query: " + query);
+        System.out.println("Projection: " + projection);
+        System.out.println("Sort: " + sort);
+        return query;
     }
 
     public ReportResponse addScheduleToReport(AddScheduleToReport reportDto){

@@ -20,6 +20,7 @@ public class ReportOwnership {
 
     @DBRef
     private Report report;
+
     @DBRef
     private Employee employee;
 

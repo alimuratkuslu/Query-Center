@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete, Box, Snackbar, Alert } from '@mui/material';
+import { TextField, Button, Card, Modal, Autocomplete, Box, Snackbar, Alert } from '@mui/material';
 
 function SearchTrigger() {
   const [searchTerm, setSearchTerm] = useState('');

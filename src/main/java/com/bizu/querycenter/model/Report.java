@@ -30,4 +30,6 @@ public class Report {
     @DBRef
     private List<Schedule> schedules;
 
+    private boolean isActive;
+
 }

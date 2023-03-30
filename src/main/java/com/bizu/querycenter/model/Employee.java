@@ -29,6 +29,4 @@ public class Employee {
     @JsonIgnore
     @DBRef
     private List<Report> reports;
-
-
 }

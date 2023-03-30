@@ -1,27 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
+import { Tabs, Tab } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+import { Checkbox } from '@mui/material';
 
 function SearchReport() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [allReports, setAllReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [selectedReportName, setSelectedReportName] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [newQuery, setNewQuery] = useState('');
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
+
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [ownerships, setOwnerships] = useState([]);
+  const filteredOwnerships = ownerships.filter((ownership) => ownership.report.name === selectedReportName);
 
   const handleSearch = async () => {
     try {
       const response = await fetch(`/report/searchReport?name=${searchTerm}`);
       const data = await response.json();
       setSelectedReport(data._id);
+      setSelectedReportName(data.name);
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
       setSearchResults([]);
     }
   };
+
+  const getRowId = (row) => row._id;
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -31,6 +42,14 @@ function SearchReport() {
         setAllReports(reportJson);
     };
     fetchReports();
+
+    const fetchOwnerships = async () => {
+      const ownershipData = await fetch('/ownership');
+      const ownershipJson = await ownershipData.json();
+      console.log(ownershipJson);
+      setOwnerships(ownershipJson);
+    };
+    fetchOwnerships();
   }, []);
 
   const handleInputChange = (event) => {
@@ -63,6 +82,19 @@ function SearchReport() {
     }
   };
 
+  const convertQuery = async () => {
+    const sqlQuery = 'SELECT name, email FROM Employees';
+    const response = await fetch('/report/convertQuery', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({sqlQuery})
+    });
+    const data = await response.json();
+    console.log(data);
+  }
+
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -94,7 +126,12 @@ function SearchReport() {
       {searchResults.map(result => (
         <Card key={result._id} style={{ width: '80%', margin: '1rem 0' }}>
           <h3 style={{ margin: '0.5rem' }}>{result.name}</h3>
-          <TableContainer component={Paper}>
+          <Tabs value={selectedTab} onChange={(event, newValue) => setSelectedTab(newValue)}>
+            <Tab label="SQL Query" />
+            <Tab label="Ownerships" />
+          </Tabs>
+          {selectedTab === 0 && (
+            <TableContainer component={Paper}>
             <Table aria-label="report attributes">
               <TableBody>
                 <TableRow>
@@ -136,6 +173,47 @@ function SearchReport() {
               </TableBody>
             </Table>
           </TableContainer>
+          )}
+          {selectedTab === 1 && (
+            <TableContainer component={Paper}>
+            <Table aria-label="ownership attributes">
+              <TableBody>            
+                <br />                               
+                <div style={{ height: '65vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                  <div style={{width: '80%', height: 450}}>
+                    <DataGrid rows={filteredOwnerships} columns={[
+                      { field: '_id', headerName: 'ID', width: 70 },
+
+                      { field: 'report.name', headerName: 'Report Name', width: 130, valueGetter: (params) => (
+                        params.row.report.name
+                      ), },
+                      { field: 'employee.name', headerName: 'Employee Name', width: 130, valueGetter: (params) => (
+                        params.row.employee.name
+                      ), },
+
+                      { field: 'owner', headerName: 'Ownership', width: 100, renderCell: (params) => (
+                          <Checkbox checked={params.value} disabled />
+                        ),
+                      },
+                      { field: 'read', headerName: 'Read', width: 50, renderCell: (params) => (
+                          <Checkbox checked={params.value} disabled />
+                        ),
+                      },
+                      { field: 'write', headerName: 'Write', width: 50, renderCell: (params) => (
+                          <Checkbox checked={params.value} disabled />
+                        ),
+                      },
+                      { field: 'run', headerName: 'Run', width: 50, renderCell: (params) => (
+                          <Checkbox checked={params.value} disabled />
+                        ),
+                      },
+                    ]} getRowId={getRowId} pageSize={5} />
+                  </div>
+                </div>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          )}
           <Modal open={showModal} onClose={() => setShowModal(false)}>
             <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 24, p: 4, bgcolor: 'background.paper'}}>
               <Typography variant='h6' component='h2'>

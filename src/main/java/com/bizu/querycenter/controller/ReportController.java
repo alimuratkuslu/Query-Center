@@ -6,19 +6,26 @@ import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.ReportService;
+import com.github.vincentrussell.query.mongodb.sql.converter.ParseException;
+import org.bson.Document;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/report")
 public class ReportController {
 
     private final ReportService reportService;
+    private final MongoTemplate mongoTemplate;
 
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportService reportService, MongoTemplate mongoTemplate) {
         this.reportService = reportService;
+        this.mongoTemplate = mongoTemplate;
     }
 
     @GetMapping("/{id}")
@@ -44,6 +51,12 @@ public class ReportController {
     @PostMapping("/addQuery/{reportId}")
     public ResponseEntity<ReportResponse> addQueryToReport(@PathVariable Integer reportId, @RequestBody AddQueryToReport query){
         return ResponseEntity.ok(reportService.addQuery(reportId, query));
+    }
+
+    @PostMapping("/convertQuery")
+    public Document convertQuery(@RequestBody Map<String, String> body) throws ParseException {
+        String sqlQuery = body.get("sqlQuery");
+        return reportService.convertQuery(sqlQuery);
     }
 
     @PostMapping("/addSchedule")

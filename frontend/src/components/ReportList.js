@@ -13,7 +13,7 @@ const columns = [
   {
     field: 'employees',
     headerName: 'Employees',
-    width: 600,
+    width: 550,
     renderCell: (params) => (
       <div style={{ display: 'flex'}}>
         {params.row.employees.map((employee) => (
