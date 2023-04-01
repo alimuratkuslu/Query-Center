@@ -5,6 +5,7 @@ import ScheduleList from './components/ScheduleList';
 import TriggerList from './components/TriggerList';
 import ReportOwnershipList from './components/ReportOwnershipList';
 import RequestList from './components/RequestList';
+import TeamList from './components/TeamList';
 import Dashboard from './components/Dashboard';
 import SearchReport from './components/SearchReport';
 import AddEmployee from './components/AddEmployee';
@@ -26,6 +27,7 @@ function App() {
         <Route exact path='/trigger' element={<TriggerList />} />
         <Route exact path='/ownership' element={<ReportOwnershipList />} />
         <Route exact path='/request' element={<RequestList />} />
+        <Route exact path='/team' element={<TeamList />} />
         <Route exact path='/searchReport' element={<SearchReport />} />
         <Route exact path='/addEmployee' element={<AddEmployee />} />
         <Route exact path='/addReport' element={<AddReport />} />
