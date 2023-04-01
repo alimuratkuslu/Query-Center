@@ -4,6 +4,7 @@ import ReportList from './components/ReportList';
 import ScheduleList from './components/ScheduleList';
 import TriggerList from './components/TriggerList';
 import ReportOwnershipList from './components/ReportOwnershipList';
+import RequestList from './components/RequestList';
 import Dashboard from './components/Dashboard';
 import SearchReport from './components/SearchReport';
 import AddEmployee from './components/AddEmployee';
@@ -11,7 +12,7 @@ import AddReport from './components/AddReport';
 import AddSchedule from './components/AddSchedule';
 import AddTrigger from './components/AddTrigger';
 import AddOwnership from './components/AddOwnership';
-import RequestList from './components/RequestList';
+import AddRequest from './components/AddRequest';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route exact path='/addSchedule' element={<AddSchedule />} />
         <Route exact path='/addTrigger' element={<AddTrigger />} />
         <Route exact path='/addOwnership' element={<AddOwnership />} />
+        <Route exact path='/addRequest' element={<AddRequest />} />
       </Routes>
     </Router>
   );

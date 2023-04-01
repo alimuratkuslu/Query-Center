@@ -6,6 +6,7 @@ import Dashboard from './Dashboard';
 const AddReport = () => {
   const [name, setName] = useState('');
   const [sqlQuery, setSqlQuery] = useState('');
+  const [requestId, setRequestId] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -45,6 +46,17 @@ const AddReport = () => {
                     required
                     value={sqlQuery}
                     onChange={(e) => setSqlQuery(e.target.value)}
+                />
+            </div>
+            <br />
+            <div>
+                <TextField
+                    label="Request ID"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={requestId}
+                    onChange={(e) => setRequestId(e.target.value)}
                 />
             </div>
             <br />

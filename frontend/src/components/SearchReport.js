@@ -13,6 +13,7 @@ function SearchReport() {
   const [showModal, setShowModal] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [newQuery, setNewQuery] = useState('');
+  const [requestId, setRequestId] = useState('');
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState(0);
@@ -142,6 +143,7 @@ function SearchReport() {
                           <Modal open={updateModalOpen} onClose={() => setUpdateModalOpen(false)}>
                             <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 4, p: 4, bgcolor: 'background.paper'}}>
                               <TextField label="New SQL Query" multiline rows={4} variant="outlined" value={newQuery} onChange={(e) => setNewQuery(e.target.value)} />
+                              <TextField label="Request ID" style={{ marginTop: '16px', width: '50%', height: '10%' }} helperText="* Necessary" multiline rows={4} variant="outlined" value={requestId} onChange={(e) => setRequestId(e.target.value)} />
                               <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => handleQueryUpdate()}>Save</Button>
                               <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => setUpdateModalOpen(false)}>Cancel</Button>
                             </Box>

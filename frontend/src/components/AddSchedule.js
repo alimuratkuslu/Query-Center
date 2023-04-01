@@ -10,6 +10,7 @@ const AddSchedule = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [triggers, setTriggers] = useState([]);
+  const [requestId, setRequestId] = useState('');
   const [selectedTriggers, setSelectedTriggers] = useState([]);
 
   useEffect(() => {
@@ -115,6 +116,17 @@ const AddSchedule = () => {
                         variant="outlined" 
                     />
                     )}
+                />
+            </div>
+            <br />
+            <div>
+                <TextField
+                    label="Request ID"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={requestId}
+                    onChange={(e) => setRequestId(e.target.value)}
                 />
             </div>
             <br />

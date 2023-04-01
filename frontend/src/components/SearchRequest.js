@@ -5,6 +5,9 @@ function SearchRequest() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [allRequests, setAllRequests] = useState([]);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
 
   const handleSearch = async () => {
     try {
@@ -12,6 +15,7 @@ function SearchRequest() {
       console.log(searchTerm);
       const response = await fetch(`/request/searchRequest?id=${searchTerm}`);
       const data = await response.json();
+      setSelectedRequest(data._id);
       console.log(data);
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
@@ -39,6 +43,30 @@ function SearchRequest() {
       setSearchTerm(value.name);
     } else {
       setSearchTerm("");
+    }
+  };
+
+  const handleRejectRequest = async () => {
+    try {
+      const response = await fetch(`/request/reject/${selectedRequest}`);
+      const data = await response.json();
+      console.log(data);
+      setUpdateModalOpen(false);
+      setShowUpdateSuccess(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDoneRequest = async () => {
+    try {
+      const response = await fetch(`/request/done/${selectedRequest}`);
+      const data = await response.json();
+      console.log(data);
+      setUpdateModalOpen(false);
+      setShowUpdateSuccess(true);
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -77,13 +105,13 @@ function SearchRequest() {
             <Table aria-label="request attributes">
               <TableBody>
                 <TableRow>
-                  <TableCell component="th" scope="row">Description:</TableCell>
+                  <TableCell component="th" scope="row">Description</TableCell>
                   <TableCell align="left">
                         {result.description}
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell component="th" scope="row">Status:</TableCell>
+                  <TableCell component="th" scope="row">Status</TableCell>
                   <TableCell align="left">
                   {result.status === "IN_PROGRESS" && 
                     <span
@@ -122,6 +150,13 @@ function SearchRequest() {
                     </span>
                   }
                   </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell component="th" scope="row">Change Status</TableCell>
+                    <TableCell align='left'>
+                      <Button variant='outlined' color='error' onClick={() => handleRejectRequest()} >Reject Request</Button>
+                      <Button variant='contained' color='success' onClick={() => handleDoneRequest()} style={{ marginLeft: '1rem' }}>Finish Request</Button>
+                    </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
