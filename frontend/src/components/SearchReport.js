@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
+import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Checkbox } from '@mui/material';
@@ -15,6 +15,8 @@ function SearchReport() {
   const [newQuery, setNewQuery] = useState('');
   const [requestId, setRequestId] = useState('');
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
+  const [queryResult, setQueryResult] = useState([]);
+  const [runQueryModal, setRunQueryModal] = useState(false);
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [ownerships, setOwnerships] = useState([]);
@@ -114,11 +116,14 @@ function SearchReport() {
   };
 
   const runQuery = async () => {
-    const query = { filter: '{}', projection: '{ _id: 1, name: 1, email: 1 }' };
+    setRunQueryModal(true);
+    
+    const query = { filter: '{_id: { $gt: 8 }}', projection: '{ _id: 1, name: 1, email: 1 }' };  
+    const queryParams = new URLSearchParams(query).toString();
 
     console.log(query);
     try {
-        const response = await fetch(`/employee/runQuery?query=${encodeURIComponent(JSON.stringify(query))}`, {
+        const response = await fetch(`/employee/runQuery?${queryParams}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -128,6 +133,7 @@ function SearchReport() {
         throw new Error('Network response was not ok');
       }
       const results = await response.json();
+      setQueryResult(results);
       console.log(results);
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
@@ -138,7 +144,6 @@ function SearchReport() {
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Button variant='outlined' onClick={runQuery}>Run Query</Button>
       <br />
       <Autocomplete
             id="search-reports"
@@ -180,6 +185,7 @@ function SearchReport() {
                     <TableCell align="left" style={{display: 'flex', justifyContent: 'space-between'}}>
                           <Button variant='outlined' style={{flex: 1}} onClick={() => setShowModal(!showModal)}>Show Query</Button>
                           <Button variant='outlined' style={{ flex: 1, marginLeft: '8px' }} onClick={() => setUpdateModalOpen(true)}>Update Query</Button>
+                          <Button variant='outlined' style={{ flex: 1, marginLeft: '8px' }} onClick={runQuery}>Run Query</Button>
                           <Modal open={updateModalOpen} onClose={() => setUpdateModalOpen(false)}>
                             <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 4, p: 4, bgcolor: 'background.paper'}}>
                               <TextField label="New SQL Query" multiline rows={4} variant="outlined" value={newQuery} onChange={(e) => setNewQuery(e.target.value)} />
@@ -269,6 +275,31 @@ function SearchReport() {
               <Typography sx={{ mt: 2 }}>
                 {result.sqlQuery}
               </Typography>
+            </Box>
+          </Modal>
+          <Modal open={runQueryModal} onClose={() => setRunQueryModal(false)}>
+            <Box sx={{position: 'absolute', top: '15%', left: '20%', width: 1200, height: '600px', overflow: 'auto', boxShadow: 24, p: 4, bgcolor: 'background.paper'}}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {queryResult.map(row => {
+                  const rowData = JSON.parse(row);
+                  return(
+                    <TableRow key={rowData._id}>
+                      <TableCell>{rowData._id}</TableCell>
+                      <TableCell>{rowData.name}</TableCell>
+                      <TableCell>{rowData.email}</TableCell>
+                  </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
             </Box>
           </Modal>
         </Card>

@@ -5,10 +5,7 @@ import com.bizu.querycenter.dto.ReportToEmployee;
 import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
 import com.bizu.querycenter.dto.Response.EmployeeResponse;
 import com.bizu.querycenter.model.Employee;
-import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.EmployeeService;
-import com.mongodb.client.FindIterable;
-import org.bson.Document;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +37,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/runQuery")
-    public ResponseEntity<List<String>> runQuery(@RequestParam String query){
-        return ResponseEntity.ok(employeeService.runQuery(query));
+    public ResponseEntity<List<String>> runQuery(@RequestParam String filter, @RequestParam String projection){
+        return ResponseEntity.ok(employeeService.runQuery(filter, projection));
     }
 
     @PostMapping

@@ -53,9 +53,7 @@ public class EmployeeService {
         return employee;
     }
 
-    public List<String> runQuery(String query){
-
-        System.out.println("Query: " + query);
+    public List<String> runQuery(String filter, String projection){
 
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString("mongodb+srv://alimuratkuslu:alis2001@movieapi.urlccoc.mongodb.net/test"))
@@ -65,7 +63,7 @@ public class EmployeeService {
         MongoClient mongoClient = MongoClients.create(settings);
         MongoDatabase database = mongoClient.getDatabase("QueryCenter");
         MongoCollection<Document> collection = database.getCollection("Employees");
-        FindIterable<Document> cursor = collection.find(Document.parse("{}")).projection(Document.parse("{ _id: 1, name: 1, email: 1 }"));
+        FindIterable<Document> cursor = collection.find(Document.parse(filter)).projection(Document.parse(projection));
 
         MongoCursor<Document> iterator = cursor.iterator();
 
