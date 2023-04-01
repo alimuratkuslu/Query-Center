@@ -10,6 +10,7 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CopyrightIcon from '@mui/icons-material/Copyright';
+import RequestPageIcon from '@mui/icons-material/RequestPage';
 
 const Dashboard = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -72,6 +73,12 @@ const Dashboard = () => {
               <CopyrightIcon />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Ownerships" />
+          </ListItem>
+          <ListItem button component={Link} to="/request">
+            <ListItemIcon>
+              <RequestPageIcon />
+            </ListItemIcon>
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Requests" />
           </ListItem>
           <ListItem button component={Link} to="/searchReport">
             <ListItemIcon>

@@ -4,6 +4,7 @@ import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.dto.Request.SaveRequestRequest;
 import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.dto.Response.RequestResponse;
+import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.Request;
 import com.bizu.querycenter.service.RequestService;
@@ -30,6 +31,12 @@ public class RequestController {
     @GetMapping
     public ResponseEntity<List<Request>> getAllRequests(){
         return ResponseEntity.ok(requestService.getAllRequests());
+    }
+
+    @GetMapping("/searchRequest")
+    public ResponseEntity<Request> getRequestByIdParam(@RequestParam String id){
+        Integer requestId = Integer.parseInt(id);
+        return ResponseEntity.ok(requestService.getRequestById(requestId));
     }
 
     @PostMapping
