@@ -69,6 +69,7 @@ public class ReportService {
                 .name(request.getName())
                 .sqlQuery(request.getSqlQuery())
                 .employees(employees)
+                .isActive(true)
                 .build();
 
         Report fromDB = reportRepository.save(report);

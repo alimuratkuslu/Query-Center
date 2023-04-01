@@ -5,6 +5,7 @@ import Dashboard from './Dashboard';
 import SearchReport from './SearchReport';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@material-ui/core/IconButton';
+import { Checkbox } from '@mui/material';
 
 const columns = [
   { field: '_id', headerName: 'ID', width: 70 },
@@ -24,6 +25,10 @@ const columns = [
       </div>
     ),
   },
+  { field: 'active', headerName: 'Active Status', width: 100, renderCell: (params) => (
+    <Checkbox checked={params.value} disabled />
+  ),
+},
 ];
 
 const getRowId = (row) => row._id;

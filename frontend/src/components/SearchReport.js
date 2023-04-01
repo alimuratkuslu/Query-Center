@@ -83,18 +83,35 @@ function SearchReport() {
     }
   };
 
-  const convertQuery = async () => {
-    const sqlQuery = 'SELECT name, email FROM Employees';
-    const response = await fetch('/report/convertQuery', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({sqlQuery})
-    });
-    const data = await response.json();
-    console.log(data);
-  }
+  const activateReport = async () => {
+    fetch(`/report/activate/${selectedReport}`, {
+      method: 'PATCH',
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      console.log(response.json());
+    })
+    .catch(error => {
+      console.error('There was a problem with the fetch operation:', error);
+    }); 
+  };
+
+  const deactivateReport = async () => {
+      fetch(`/report/${selectedReport}`, {
+        method: 'PATCH',
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        console.log(response.json());
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  };
 
   return (
     <div>
@@ -172,6 +189,14 @@ function SearchReport() {
                     </ul>
                   </TableCell>
                 </TableRow>
+                <TableRow>
+                  <TableCell component="th" scope="row">Active Status:</TableCell>
+                  <TableCell align="left">
+                    <Checkbox checked={result.active} disabled />
+                    <Button variant='contained' color='success' style={{ marginLeft: '1rem' }} onClick={() => activateReport()}>Activate</Button>
+                    <Button variant='outlined' color='error' style={{ marginLeft: '1rem' }} onClick={() => deactivateReport()}>Deactivate</Button>
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
@@ -186,9 +211,6 @@ function SearchReport() {
                     <DataGrid rows={filteredOwnerships} columns={[
                       { field: '_id', headerName: 'ID', width: 70 },
 
-                      { field: 'report.name', headerName: 'Report Name', width: 130, valueGetter: (params) => (
-                        params.row.report.name
-                      ), },
                       { field: 'employee.name', headerName: 'Employee Name', width: 130, valueGetter: (params) => (
                         params.row.employee.name
                       ), },
