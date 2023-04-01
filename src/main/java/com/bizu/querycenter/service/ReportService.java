@@ -153,6 +153,21 @@ public class ReportService {
         }
     }
 
+    public void activateReport(Integer id){
+        changeReportStatus(id, true);
+    }
+
+    public void deactivateReport(Integer id){
+        changeReportStatus(id, false);
+    }
+
+    private void changeReportStatus(Integer id, Boolean isActive){
+        Report currentReport = getReportById(id);
+
+        currentReport.setActive(isActive);
+        reportRepository.save(currentReport);
+    }
+
     private boolean doesEmployeeExist(Integer id){
         return reportRepository.existsById(id);
     }

@@ -69,6 +69,16 @@ public class ReportController {
         return ResponseEntity.ok(reportService.updateReport(id, request));
     }
 
+    @PatchMapping("/{id}")
+    public void deactivateReport(@PathVariable Integer id){
+        reportService.deactivateReport(id);
+    }
+
+    @PatchMapping("/activate/{id}")
+    public void activateReport(@PathVariable Integer id){
+        reportService.activateReport(id);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteReport(@PathVariable Integer id){
         reportService.deleteReportById(id);
