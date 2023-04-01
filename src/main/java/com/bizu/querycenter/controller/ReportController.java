@@ -4,6 +4,7 @@ import com.bizu.querycenter.dto.Add.AddQueryToReport;
 import com.bizu.querycenter.dto.Add.AddScheduleToReport;
 import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.dto.Response.ReportResponse;
+import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.ReportService;
 import com.github.vincentrussell.query.mongodb.sql.converter.ParseException;
@@ -53,10 +54,9 @@ public class ReportController {
         return ResponseEntity.ok(reportService.addQuery(reportId, query));
     }
 
-    @PostMapping("/convertQuery")
-    public Document convertQuery(@RequestBody Map<String, String> body) throws ParseException {
-        String sqlQuery = body.get("sqlQuery");
-        return reportService.convertQuery(sqlQuery);
+    @GetMapping("/runQuery")
+    public ResponseEntity<List<Employee>> runEmployeeQuery(@RequestParam String query){
+        return ResponseEntity.ok(reportService.runEmployeeQuery(query));
     }
 
     @PostMapping("/addSchedule")

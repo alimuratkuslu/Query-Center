@@ -14,6 +14,10 @@ import com.bizu.querycenter.repository.ScheduleRepository;
 import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
 import com.github.vincentrussell.query.mongodb.sql.converter.ParseException;
 import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.springframework.stereotype.Service;
 
@@ -92,22 +96,28 @@ public class ReportService {
                 .build();
     }
 
-    public Document convertQuery(String sqlQuery) throws ParseException {
-        System.out.println("Input SQL query: " + sqlQuery);
+    public List<Employee> runEmployeeQuery(String query){
+        System.out.println("Query string: " + query);
+        MongoClient mongoClient = MongoClients.create("mongodb+srv://alimuratkuslu:alis2001@movieapi.urlccoc.mongodb.net/test");
+        MongoDatabase database = mongoClient.getDatabase("QueryCenter");
+        MongoCollection<Document> collection = database.getCollection("Employees");
+        
+        List<Document> queryResults = collection.find(Document.parse(query)).into(new ArrayList<>());
 
-        QueryConverter queryConverter = new QueryConverter.Builder().sqlString(sqlQuery).build();
-        MongoDBQueryHolder mongoDBQueryHolder = queryConverter.getMongoQuery();
-        String collection = mongoDBQueryHolder.getCollection();
-        Document query = mongoDBQueryHolder.getQuery();
-        Document projection = mongoDBQueryHolder.getProjection();
-        Document sort = mongoDBQueryHolder.getSort();
+        System.out.println("Query results size: " + queryResults.size());
 
-        System.out.println("MongoDB query holder: " + mongoDBQueryHolder);
-        System.out.println("Collection: " + collection);
-        System.out.println("Query: " + query);
-        System.out.println("Projection: " + projection);
-        System.out.println("Sort: " + sort);
-        return query;
+        List<Employee> employees = new ArrayList<>();
+        for (Document doc : queryResults) {
+            Employee employee = new Employee();
+
+            // employee.setId(doc.getObjectId("_id").toString());
+            employee.set_id(doc.getInteger("_id"));
+            employee.setName(doc.getString("name"));
+            employee.setEmail(doc.getString("email"));
+            employees.add(employee);
+            System.out.println("Creating Employee object: " + employee);
+        }
+        return employees;
     }
 
     public ReportResponse addScheduleToReport(AddScheduleToReport reportDto){

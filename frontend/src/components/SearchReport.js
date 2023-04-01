@@ -113,6 +113,29 @@ function SearchReport() {
       });
   };
 
+  const runQuery = async () => {
+    const query = { query: "{}" };
+    // db.Employees.find({}, { _id: 1, name: 1, email: 1 })
+
+    console.log(query);
+    try {
+      const response = await fetch('/report/runQuery?query=' + encodeURIComponent(JSON.stringify(query)), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const results = await response.json();
+      console.log(results);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  }
+  
+
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
