@@ -35,6 +35,12 @@ public class TeamService {
         return teams;
     }
 
+    public Team getTeamByName(String teamName){
+        Team team = teamRepository.findByName(teamName);
+
+        return team;
+    }
+
     public TeamResponse saveTeam(SaveTeamRequest request){
 
         List<Team> teams = getAllTeams();

@@ -5,6 +5,7 @@ import com.bizu.querycenter.dto.Request.SaveRequestRequest;
 import com.bizu.querycenter.dto.Request.SaveTeamRequest;
 import com.bizu.querycenter.dto.Response.RequestResponse;
 import com.bizu.querycenter.dto.Response.TeamResponse;
+import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Request;
 import com.bizu.querycenter.model.Team;
 import com.bizu.querycenter.service.TeamService;
@@ -31,6 +32,11 @@ public class TeamController {
     @GetMapping
     public ResponseEntity<List<Team>> getAllTeams(){
         return ResponseEntity.ok(teamService.getAllTeams());
+    }
+
+    @GetMapping("/searchTeam")
+    public ResponseEntity<Team> getTeamByName(@RequestParam String name){
+        return ResponseEntity.ok(teamService.getTeamByName(name));
     }
 
     @PostMapping
