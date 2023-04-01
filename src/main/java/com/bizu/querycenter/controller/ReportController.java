@@ -54,11 +54,6 @@ public class ReportController {
         return ResponseEntity.ok(reportService.addQuery(reportId, query));
     }
 
-    @GetMapping("/runQuery")
-    public ResponseEntity<List<Employee>> runEmployeeQuery(@RequestParam String query){
-        return ResponseEntity.ok(reportService.runEmployeeQuery(query));
-    }
-
     @PostMapping("/addSchedule")
     public ResponseEntity<ReportResponse> addScheduleToReport(@RequestBody AddScheduleToReport scheduleDto){
         return ResponseEntity.ok(reportService.addScheduleToReport(scheduleDto));

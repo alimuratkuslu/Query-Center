@@ -114,12 +114,11 @@ function SearchReport() {
   };
 
   const runQuery = async () => {
-    const query = { query: "{}" };
-    // db.Employees.find({}, { _id: 1, name: 1, email: 1 })
+    const query = { filter: '{}', projection: '{ _id: 1, name: 1, email: 1 }' };
 
     console.log(query);
     try {
-      const response = await fetch('/report/runQuery?query=' + encodeURIComponent(JSON.stringify(query)), {
+        const response = await fetch(`/employee/runQuery?query=${encodeURIComponent(JSON.stringify(query))}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -133,12 +132,13 @@ function SearchReport() {
     } catch (error) {
       console.error('There was a problem with the fetch operation:', error);
     }
-  }
+  };
   
 
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Button variant='outlined' onClick={runQuery}>Run Query</Button>
       <br />
       <Autocomplete
             id="search-reports"

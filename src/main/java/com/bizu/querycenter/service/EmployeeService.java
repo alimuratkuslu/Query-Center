@@ -10,6 +10,10 @@ import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.repository.EmployeeRepository;
 import com.bizu.querycenter.repository.ReportRepository;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.client.*;
+import org.bson.Document;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,6 +51,31 @@ public class EmployeeService {
         Employee employee = employeeRepository.findByName(employeeName);
 
         return employee;
+    }
+
+    public List<String> runQuery(String query){
+
+        System.out.println("Query: " + query);
+
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString("mongodb+srv://alimuratkuslu:alis2001@movieapi.urlccoc.mongodb.net/test"))
+                .retryWrites(true)
+                .build();
+
+        MongoClient mongoClient = MongoClients.create(settings);
+        MongoDatabase database = mongoClient.getDatabase("QueryCenter");
+        MongoCollection<Document> collection = database.getCollection("Employees");
+        FindIterable<Document> cursor = collection.find(Document.parse("{}")).projection(Document.parse("{ _id: 1, name: 1, email: 1 }"));
+
+        MongoCursor<Document> iterator = cursor.iterator();
+
+        List<String> results = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Document document = iterator.next();
+            results.add(document.toJson());
+        }
+
+        return results;
     }
 
     public EmployeeResponse saveEmployee(SaveEmployeeRequest request){

@@ -96,30 +96,6 @@ public class ReportService {
                 .build();
     }
 
-    public List<Employee> runEmployeeQuery(String query){
-        System.out.println("Query string: " + query);
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://alimuratkuslu:alis2001@movieapi.urlccoc.mongodb.net/test");
-        MongoDatabase database = mongoClient.getDatabase("QueryCenter");
-        MongoCollection<Document> collection = database.getCollection("Employees");
-        
-        List<Document> queryResults = collection.find(Document.parse(query)).into(new ArrayList<>());
-
-        System.out.println("Query results size: " + queryResults.size());
-
-        List<Employee> employees = new ArrayList<>();
-        for (Document doc : queryResults) {
-            Employee employee = new Employee();
-
-            // employee.setId(doc.getObjectId("_id").toString());
-            employee.set_id(doc.getInteger("_id"));
-            employee.setName(doc.getString("name"));
-            employee.setEmail(doc.getString("email"));
-            employees.add(employee);
-            System.out.println("Creating Employee object: " + employee);
-        }
-        return employees;
-    }
-
     public ReportResponse addScheduleToReport(AddScheduleToReport reportDto){
         Report report = getReportById(reportDto.getReportId());
         Schedule schedule = scheduleService.getScheduleById(reportDto.getScheduleId());
