@@ -30,6 +30,7 @@ The application can be built and run by the Docker engine. The Dockerfile has mu
 Please follow the below directions in order to build and run the application with Docker Compose;
 
 $ cd querycenter
+
 $ docker-compose up -d
 
 ## Maven Run
@@ -37,7 +38,9 @@ $ docker-compose up -d
 To build and run the application with Maven, please follow the directions below;
 
 $ cd querycenter
+
 $ mvn clean install
+
 $ mvn spring-boot:run
 
 
