@@ -1,7 +1,8 @@
 version: '3'
 services:
-
   querycenter-back-end:
+    build:
+      context: .
     image: "querycenter-backend:0.0.1"
     container_name: querycenter-back-end
     ports:
@@ -10,13 +11,18 @@ services:
       - SPRING.PROFILES.ACTIVE=default
     networks:
       - querycenter-network
+
   querycenter-front-end:
+    build:
+      context: .
     image: "querycenter-frontend:0.0.1"
     container_name: querycenter-front-end
     ports:
       - "3000:3000"
     networks:
       - querycenter-network
+    depends_on:
+      - querycenter-back-end
 
 networks:
   querycenter-network:
