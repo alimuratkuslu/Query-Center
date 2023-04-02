@@ -1,0 +1,23 @@
+version: '3'
+services:
+
+  querycenter-back-end:
+    image: "querycenter-backend:0.0.1"
+    container_name: querycenter-back-end
+    ports:
+      - "9595:8080"
+    environment:
+      - SPRING.PROFILES.ACTIVE=default
+    networks:
+      - querycenter-network
+  querycenter-front-end:
+    image: "querycenter-frontend:0.0.1"
+    container_name: querycenter-front-end
+    ports:
+      - "3000:3000"
+    networks:
+      - querycenter-network
+
+networks:
+  querycenter-network:
+    driver: bridge
