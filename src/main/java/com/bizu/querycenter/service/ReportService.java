@@ -2,30 +2,15 @@ package com.bizu.querycenter.service;
 
 import com.bizu.querycenter.dto.Add.AddQueryToReport;
 import com.bizu.querycenter.dto.Add.AddScheduleToReport;
-import com.bizu.querycenter.dto.Request.SaveOwnershipRequest;
-import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.dto.Request.SaveReportRequest;
+import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
-import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.repository.ReportRepository;
 import com.bizu.querycenter.repository.ScheduleRepository;
-import com.github.vincentrussell.query.mongodb.sql.converter.MongoDBQueryHolder;
-import com.github.vincentrussell.query.mongodb.sql.converter.ParseException;
-import com.github.vincentrussell.query.mongodb.sql.converter.QueryConverter;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import org.bson.Document;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

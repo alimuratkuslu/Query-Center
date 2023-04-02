@@ -117,7 +117,6 @@ function SearchReport() {
 
   const runQuery = async () => {
     setRunQueryModal(true);
-    
     const query = { filter: '{_id: { $gt: 8 }}', projection: '{ _id: 1, name: 1, email: 1 }' };  
     const queryParams = new URLSearchParams(query).toString();
 
