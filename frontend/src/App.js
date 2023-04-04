@@ -1,19 +1,20 @@
 import './App.css';
-import EmployeeList from './components/EmployeeList';
-import ReportList from './components/ReportList';
-import ScheduleList from './components/ScheduleList';
-import TriggerList from './components/TriggerList';
-import ReportOwnershipList from './components/ReportOwnershipList';
-import RequestList from './components/RequestList';
-import TeamList from './components/TeamList';
+import EmployeeList from './components/Employees/EmployeeList';
+import ReportList from './components/Reportss/ReportList';
+import ScheduleList from './components/Schedules/ScheduleList';
+import TriggerList from './components/Triggers/TriggerList';
+import ReportOwnershipList from './components/Ownerships/ReportOwnershipList';
+import RequestList from './components/Requests/RequestList';
+import TeamList from './components/Teams/TeamList';
 import Dashboard from './components/Dashboard';
-import SearchReport from './components/SearchReport';
-import AddEmployee from './components/AddEmployee';
-import AddReport from './components/AddReport';
-import AddSchedule from './components/AddSchedule';
-import AddTrigger from './components/AddTrigger';
-import AddOwnership from './components/AddOwnership';
-import AddRequest from './components/AddRequest';
+import SearchReport from './components/Reportss/SearchReport';
+import AddEmployee from './components/Employees/AddEmployee';
+import AddReport from './components/Reportss/AddReport';
+import AddSchedule from './components/Schedules/AddSchedule';
+import AddTrigger from './components/Triggers/AddTrigger';
+import AddOwnership from './components/Ownerships/AddOwnership';
+import AddRequest from './components/Requests/AddRequest';
+import AddTeam from './components/Teams/AddTeam';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route exact path='/addTrigger' element={<AddTrigger />} />
         <Route exact path='/addOwnership' element={<AddOwnership />} />
         <Route exact path='/addRequest' element={<AddRequest />} />
+        <Route exact path='/addTeam' element={<AddTeam />} />
       </Routes>
     </Router>
   );

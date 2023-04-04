@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { TextField, Button, Typography, Snackbar, Alert, Autocomplete } from '@mui/material';
-import Dashboard from './Dashboard';
+import Dashboard from '../Dashboard';
 
 const AddSchedule = () => {
   const [name, setName] = useState('');

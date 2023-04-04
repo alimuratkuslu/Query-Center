@@ -1,5 +1,6 @@
 package com.bizu.querycenter.service;
 
+import com.bizu.querycenter.config.MongoDBClient;
 import com.bizu.querycenter.dto.Add.AddReportToEmployee;
 import com.bizu.querycenter.dto.ReportToEmployee;
 import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
@@ -10,8 +11,6 @@ import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.repository.EmployeeRepository;
 import com.bizu.querycenter.repository.ReportRepository;
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import org.bson.Document;
 import org.springframework.stereotype.Service;
@@ -27,11 +26,14 @@ public class EmployeeService {
 
     private final ReportOwnershipService ownershipService;
 
+    private final MongoDBClient mongoDBClient;
 
-    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipService ownershipService) {
+
+    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipService ownershipService, MongoDBClient mongoDBClient) {
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
         this.ownershipService = ownershipService;
+        this.mongoDBClient = mongoDBClient;
     }
 
     public Employee getEmployeeById(Integer id){
@@ -55,14 +57,11 @@ public class EmployeeService {
 
     public List<String> runQuery(String filter, String projection){
 
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(new ConnectionString("mongodb+srv://alimuratkuslu:alis2001@movieapi.urlccoc.mongodb.net/test"))
-                .retryWrites(true)
-                .build();
-
-        MongoClient mongoClient = MongoClients.create(settings);
+        MongoClient mongoClient = mongoDBClient.getClient();
         MongoDatabase database = mongoClient.getDatabase("QueryCenter");
+        
         MongoCollection<Document> collection = database.getCollection("Employees");
+
         FindIterable<Document> cursor = collection.find(Document.parse(filter)).projection(Document.parse(projection));
 
         MongoCursor<Document> iterator = cursor.iterator();

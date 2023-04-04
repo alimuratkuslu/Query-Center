@@ -143,6 +143,7 @@ function SearchReport() {
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Button variant='outlined' onClick={runQuery}>Run Query</Button>
       <br />
       <Autocomplete
             id="search-reports"

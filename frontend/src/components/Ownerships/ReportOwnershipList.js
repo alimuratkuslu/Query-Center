@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
-import Dashboard from './Dashboard';
+import Dashboard from '../Dashboard';
 import SearchOwnership from './SearchOwnership';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@material-ui/core/IconButton';
