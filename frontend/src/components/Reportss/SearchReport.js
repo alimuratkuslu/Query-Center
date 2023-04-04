@@ -9,6 +9,7 @@ function SearchReport() {
   const [searchResults, setSearchResults] = useState([]);
   const [allReports, setAllReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [selectedReportQuery, setSelectedReportQuery] = useState(null);
   const [selectedReportName, setSelectedReportName] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -28,6 +29,7 @@ function SearchReport() {
       const data = await response.json();
       setSelectedReport(data._id);
       setSelectedReportName(data.name);
+      setSelectedReportQuery(data.query);
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
@@ -117,10 +119,11 @@ function SearchReport() {
 
   const runQuery = async () => {
     setRunQueryModal(true);
-    const query = { filter: '{_id: { $gt: 8 }}', projection: '{ _id: 1, name: 1, email: 1 }' };  
+    // const query = { filter: '{_id: { $gt: 8 }}', projection: '{ _id: 1, name: 1, email: 1 }' };  
+    const query = { filter: JSON.stringify(selectedReportQuery), projection: '{ _id: 1, name: 1, email: 1 }'};
+    console.log("This is the selected query: " + selectedReportQuery);
     const queryParams = new URLSearchParams(query).toString();
 
-    console.log(query);
     try {
         const response = await fetch(`/employee/runQuery?${queryParams}`, {
         method: 'GET',
@@ -143,7 +146,6 @@ function SearchReport() {
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Button variant='outlined' onClick={runQuery}>Run Query</Button>
       <br />
       <Autocomplete
             id="search-reports"

@@ -3,6 +3,7 @@ services:
   querycenter-back-end:
     build:
       context: .
+      dockerfile: Dockerfile
     image: "querycenter-backend:0.0.1"
     container_name: querycenter-back-end
     ports:
@@ -14,7 +15,8 @@ services:
 
   querycenter-front-end:
     build:
-      context: .
+      context: ./frontend
+      dockerfile: Dockerfile
     image: "querycenter-frontend:0.0.1"
     container_name: querycenter-front-end
     ports:

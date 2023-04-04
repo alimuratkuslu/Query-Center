@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, AppBar, Toolbar, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import CloseIcon from '@material-ui/icons/Close';
@@ -15,6 +16,8 @@ import GroupIcon from '@mui/icons-material/Group';
 
 const Dashboard = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [appBarTitle, setAppBarTitle] = useState('Query Center');
+  const location = useLocation();
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -24,17 +27,63 @@ const Dashboard = () => {
     setDrawerOpen(false);
   };
 
+  const handlePageChange = (title) => {
+    console.log(title);
+    setAppBarTitle(title);
+    handleDrawerClose();
+  };
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    switch (currentPath) {
+      case '/':
+        setAppBarTitle('Query Center');
+        break;
+      case '/employee':
+        setAppBarTitle('Employees');
+        break;
+      case '/report':
+        setAppBarTitle('Reports');
+        break;
+      case '/schedule':
+        setAppBarTitle('Schedules');
+        break;
+      case '/trigger':
+        setAppBarTitle('Triggers');
+        break;
+      case '/ownership':
+        setAppBarTitle('Ownerships');
+        break;
+      case '/request':
+        setAppBarTitle('Requests');
+        break;
+      case '/team':
+        setAppBarTitle('Teams');
+        break;
+      case '/searchReport':
+        setAppBarTitle('Search Report');
+        break;
+      default:
+        setAppBarTitle('Query Center');
+        break;
+    }
+  }, [location]);
+
   return (
     <div>
-      <h1 style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}> Query Center </h1>
-      <Box paddingLeft='20px'>
-        <IconButton
+      <AppBar position="static" key={appBarTitle}>
+        <Toolbar>
+          <IconButton
             onClick={drawerOpen ? handleDrawerClose : handleDrawerOpen}
-            sx={{ position: 'absolute', bottom: '16px' }}
+            sx={{ mr: 2 }}
           >
             {drawerOpen ? <CloseIcon /> : <MenuIcon />}
-        </IconButton>
-      </Box>
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{flexGrow: 1, textAlign: 'center', fontSize: '24px'}}>
+            {appBarTitle}
+          </Typography>
+        </Toolbar>
+      </AppBar>
       <Drawer
         variant="persistent"
         anchor="left"
@@ -57,37 +106,37 @@ const Dashboard = () => {
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Reports" />
           </ListItem>
-          <ListItem button component={Link} to="/schedule">
+          <ListItem button component={Link} to="/schedule" onClick={() => handlePageChange('Schedules')}>
             <ListItemIcon>
               <CalendarMonthIcon />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Schedules" />
           </ListItem>
-          <ListItem button component={Link} to="/trigger">
+          <ListItem button component={Link} to="/trigger" onClick={() => handlePageChange('Triggers')}>
             <ListItemIcon>
               <ScheduleIcon />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Triggers" />
           </ListItem>
-          <ListItem button component={Link} to="/ownership">
+          <ListItem button component={Link} to="/ownership" onClick={() => handlePageChange('Ownerships')}>
             <ListItemIcon>
               <CopyrightIcon />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Ownerships" />
           </ListItem>
-          <ListItem button component={Link} to="/request">
+          <ListItem button component={Link} to="/request" onClick={() => handlePageChange('Requests')}>
             <ListItemIcon>
               <RequestPageIcon />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Requests" />
           </ListItem>
-          <ListItem button component={Link} to="/team">
+          <ListItem button component={Link} to="/team" onClick={() => handlePageChange('Teams')}>
             <ListItemIcon>
               <GroupIcon />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Teams" />
           </ListItem>
-          <ListItem button component={Link} to="/searchReport">
+          <ListItem button component={Link} to="/searchReport" onClick={() => handlePageChange('Search Reports')}>
             <ListItemIcon>
               <FindInPageIcon />
             </ListItemIcon>

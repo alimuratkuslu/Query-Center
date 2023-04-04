@@ -11,6 +11,8 @@ import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.repository.EmployeeRepository;
 import com.bizu.querycenter.repository.ReportRepository;
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import org.bson.Document;
 import org.springframework.stereotype.Service;
@@ -57,9 +59,13 @@ public class EmployeeService {
 
     public List<String> runQuery(String filter, String projection){
 
-        MongoClient mongoClient = mongoDBClient.getClient();
+        MongoClientSettings settings = MongoClientSettings.builder()
+                .applyConnectionString(new ConnectionString("mongodb+srv://alimuratkuslu:alis2001@movieapi.urlccoc.mongodb.net/test"))
+                .retryWrites(true)
+                .build();
+        MongoClient mongoClient = MongoClients.create(settings);
         MongoDatabase database = mongoClient.getDatabase("QueryCenter");
-        
+
         MongoCollection<Document> collection = database.getCollection("Employees");
 
         FindIterable<Document> cursor = collection.find(Document.parse(filter)).projection(Document.parse(projection));
