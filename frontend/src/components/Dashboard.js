@@ -87,6 +87,7 @@ const Dashboard = () => {
       <Drawer
         variant="persistent"
         anchor="left"
+        color='white'
         PaperProps={{
           sx: {width: "20%"},
         }}

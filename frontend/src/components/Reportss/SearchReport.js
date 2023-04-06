@@ -6,6 +6,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Checkbox } from '@mui/material';
 import { Mail } from '@mui/icons-material';
 import IconButton from '@material-ui/core/IconButton';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import CreateIcon from '@material-ui/icons/Create';
 
 function SearchReport() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -207,9 +209,13 @@ function SearchReport() {
                 <TableRow>
                   <TableCell component="th" scope="row">SQL Query:</TableCell>
                     <TableCell align="left" style={{display: 'flex', justifyContent: 'space-between'}}>
-                          <Button variant='outlined' style={{flex: 1}} onClick={() => setShowModal(!showModal)}>Show Query</Button>
-                          <Button variant='outlined' style={{ flex: 1, marginLeft: '8px' }} onClick={() => setUpdateModalOpen(true)}>Update Query</Button>
-                          <Button variant='outlined' style={{ flex: 1, marginLeft: '8px' }} onClick={runQuery}>Run Query</Button>
+                          <IconButton aria-label='query' onClick={() => setShowModal(!showModal)}>
+                            <VisibilityIcon />
+                          </IconButton>
+                          <IconButton onClick={() => setUpdateModalOpen(true)}>
+                            <CreateIcon />
+                          </IconButton>
+                          <Button variant='outlined' onClick={runQuery}>Run Query</Button>
                           <IconButton aria-label='mail' onClick={sendEmail}>
                            <Mail />
                           </IconButton>
