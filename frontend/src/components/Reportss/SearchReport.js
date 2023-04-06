@@ -4,6 +4,8 @@ import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, T
 import { Tabs, Tab } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { Checkbox } from '@mui/material';
+import { Mail } from '@mui/icons-material';
+import IconButton from '@material-ui/core/IconButton';
 
 function SearchReport() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -17,6 +19,7 @@ function SearchReport() {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [newQuery, setNewQuery] = useState('');
   const [requestId, setRequestId] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
   const [queryResult, setQueryResult] = useState([]);
   const [runQueryModal, setRunQueryModal] = useState(false);
@@ -152,7 +155,7 @@ function SearchReport() {
         report: selectedReportObject, 
         filter: selectedReportQuery, 
         projection: '{ _id: 1, name: 1, email: 1 }'});
-
+      setShowSuccessMessage(true);
       const result = response.data;
       console.log(result);
 
@@ -165,8 +168,6 @@ function SearchReport() {
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <br />
-      <Button variant='outlined' onClick={sendEmail}>Send Email</Button>
       <br />
       <Autocomplete
             id="search-reports"
@@ -209,6 +210,9 @@ function SearchReport() {
                           <Button variant='outlined' style={{flex: 1}} onClick={() => setShowModal(!showModal)}>Show Query</Button>
                           <Button variant='outlined' style={{ flex: 1, marginLeft: '8px' }} onClick={() => setUpdateModalOpen(true)}>Update Query</Button>
                           <Button variant='outlined' style={{ flex: 1, marginLeft: '8px' }} onClick={runQuery}>Run Query</Button>
+                          <IconButton aria-label='mail' onClick={sendEmail}>
+                           <Mail />
+                          </IconButton>
                           <Modal open={updateModalOpen} onClose={() => setUpdateModalOpen(false)}>
                             <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 4, p: 4, bgcolor: 'background.paper'}}>
                               <TextField label="New SQL Query" multiline rows={4} variant="outlined" value={newQuery} onChange={(e) => setNewQuery(e.target.value)} />
@@ -327,6 +331,16 @@ function SearchReport() {
           </Modal>
         </Card>
       ))}
+      <Snackbar
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        open={showSuccessMessage}
+        autoHideDuration={3000}
+        onClose={() => setShowSuccessMessage(false)}
+      >
+        <Alert severity="success" onClose={() => setShowSuccessMessage(false)}>
+            Email sent successfully
+        </Alert>
+        </Snackbar>
       </div>
     </div>
   );
