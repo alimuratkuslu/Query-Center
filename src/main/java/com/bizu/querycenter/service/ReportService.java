@@ -51,6 +51,8 @@ public class ReportService {
 
         List<Report> reports = getAllReports();
         List<Employee> employees = new ArrayList<>();
+        List<Schedule> schedules = new ArrayList<>();
+
         int size = reports.size() + 2;
 
         Report report = Report.builder()
@@ -58,6 +60,7 @@ public class ReportService {
                 .name(request.getName())
                 .sqlQuery(request.getSqlQuery())
                 .employees(employees)
+                .schedules(schedules)
                 .isActive(true)
                 .build();
 

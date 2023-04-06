@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -8,6 +9,7 @@ function SearchReport() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [allReports, setAllReports] = useState([]);
+  const [selectedReportObject, setSelectedReportObject] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
   const [selectedReportQuery, setSelectedReportQuery] = useState(null);
   const [selectedReportName, setSelectedReportName] = useState(null);
@@ -27,11 +29,12 @@ function SearchReport() {
     try {
       const response = await fetch(`/report/searchReport?name=${searchTerm}`);
       const data = await response.json();
-      console.log(data);
+      console.log("This is the data object received: ", data);
+      await setSelectedReportObject(data);
+      console.log("This is the selected report object: " + selectedReportObject);
       setSelectedReport(data._id);
       setSelectedReportName(data.name);
       setSelectedReportQuery(data.sqlQuery);
-      console.log("This is the selected query: " + selectedReportQuery);
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
@@ -121,7 +124,6 @@ function SearchReport() {
 
   const runQuery = async () => {
     setRunQueryModal(true);
-    // const query = { filter: '{_id: { $gt: 8 }}', projection: '{ _id: 1, name: 1, email: 1 }' };  
     const query = { filter: selectedReportQuery, projection: '{ _id: 1, name: 1, email: 1 }'};
     
     const queryParams = new URLSearchParams(query).toString();
@@ -143,11 +145,28 @@ function SearchReport() {
       console.error('There was a problem with the fetch operation:', error);
     }
   };
+
+  const sendEmail = async () => {
+    try {
+      const response = await axios.post('/email/sendEmail', { 
+        report: selectedReportObject, 
+        filter: selectedReportQuery, 
+        projection: '{ _id: 1, name: 1, email: 1 }'});
+
+      const result = response.data;
+      console.log(result);
+
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
+  };
   
 
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <br />
+      <Button variant='outlined' onClick={sendEmail}>Send Email</Button>
       <br />
       <Autocomplete
             id="search-reports"
