@@ -1,6 +1,5 @@
 package com.bizu.querycenter.service;
 
-import com.bizu.querycenter.config.MongoDBClient;
 import com.bizu.querycenter.dto.Add.AddReportToEmployee;
 import com.bizu.querycenter.dto.ReportToEmployee;
 import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
@@ -28,14 +27,11 @@ public class EmployeeService {
 
     private final ReportOwnershipService ownershipService;
 
-    private final MongoDBClient mongoDBClient;
 
-
-    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipService ownershipService, MongoDBClient mongoDBClient) {
+    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipService ownershipService) {
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
         this.ownershipService = ownershipService;
-        this.mongoDBClient = mongoDBClient;
     }
 
     public Employee getEmployeeById(Integer id){

@@ -15,5 +15,8 @@ import java.util.List;
 public class SaveTriggerRequest {
 
     private String name;
+
+    private String cronExpression;
+
     private List<Schedule> schedules;
 }

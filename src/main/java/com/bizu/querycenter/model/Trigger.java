@@ -23,6 +23,8 @@ public class Trigger {
 
     private String name;
 
+    private String cronExpression;
+
     @JsonIgnore
     @DBRef
     private List<Schedule> schedules;

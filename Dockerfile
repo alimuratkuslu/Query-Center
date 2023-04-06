@@ -1,5 +1,14 @@
-FROM openjdk:17
+FROM openjdk:17 AS build
 EXPOSE 8080
-ARG JAR_FILE=target/querycenter-0.0.1-SNAPSHOT.jar
-ADD ${JAR_FILE} querycenter.jar
+
+COPY pom.xml mvnw ./
+COPY .mvn .mvn
+RUN ./mvnw dependency:resolve
+
+COPY src src
+RUN ./mvnw package
+
+FROM openjdk:17
+WORKDIR querycenter
+COPY --from=build target/*.jar querycenter.jar
 ENTRYPOINT ["java","-jar","querycenter.jar"]

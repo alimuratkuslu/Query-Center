@@ -27,9 +27,11 @@ function SearchReport() {
     try {
       const response = await fetch(`/report/searchReport?name=${searchTerm}`);
       const data = await response.json();
+      console.log(data);
       setSelectedReport(data._id);
       setSelectedReportName(data.name);
-      setSelectedReportQuery(data.query);
+      setSelectedReportQuery(data.sqlQuery);
+      console.log("This is the selected query: " + selectedReportQuery);
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
@@ -120,8 +122,8 @@ function SearchReport() {
   const runQuery = async () => {
     setRunQueryModal(true);
     // const query = { filter: '{_id: { $gt: 8 }}', projection: '{ _id: 1, name: 1, email: 1 }' };  
-    const query = { filter: JSON.stringify(selectedReportQuery), projection: '{ _id: 1, name: 1, email: 1 }'};
-    console.log("This is the selected query: " + selectedReportQuery);
+    const query = { filter: selectedReportQuery, projection: '{ _id: 1, name: 1, email: 1 }'};
+    
     const queryParams = new URLSearchParams(query).toString();
 
     try {

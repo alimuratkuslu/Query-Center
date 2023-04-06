@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 const columns = [
   { field: '_id', headerName: 'ID', width: 70 },
   { field: 'name', headerName: 'Trigger Name', width: 250 },
+  { field: 'cronExpression', headerName: 'Cron Expression', width: 250 },
 ];
 
 const getRowId = (row) => row._id;

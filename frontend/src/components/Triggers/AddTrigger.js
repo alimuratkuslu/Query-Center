@@ -5,13 +5,15 @@ import Dashboard from '../Dashboard';
 
 const AddTrigger = () => {
   const [name, setName] = useState('');
+  const [cronExpression, setCronExpression] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const handleSubmit = async (e) => {
     setShowSuccessMessage(true);
     e.preventDefault();
-      const response = await axios.post('/trigger', { name });
+      const response = await axios.post('/trigger', { name: name, cronExpression: cronExpression });
       setName('');
+      setCronExpression('');
       console.log(response.data);
       console.log("Trigger saved successfully");
   };
@@ -19,6 +21,7 @@ const AddTrigger = () => {
   return (
     <div>
         <Dashboard />
+        <br />
         <form style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}} onSubmit={handleSubmit}>
             <Typography variant="h4">
                 Add Trigger
@@ -32,6 +35,17 @@ const AddTrigger = () => {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                />
+            </div>
+            <br />
+            <div>
+                <TextField
+                    label="Cron Expression"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={cronExpression}
+                    onChange={(e) => setCronExpression(e.target.value)}
                 />
             </div>
             <br />

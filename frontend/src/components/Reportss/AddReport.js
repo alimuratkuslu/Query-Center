@@ -22,6 +22,7 @@ const AddReport = () => {
   return (
     <div>
         <Dashboard />
+        <br />
         <form style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}} onSubmit={handleSubmit}>
             <Typography variant="h4">
                 Add Report

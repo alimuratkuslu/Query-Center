@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Modal, Autocomplete, Box, Snackbar, Alert } from '@mui/material';
+import { TextField, Button, Card, Modal, Autocomplete, Box, Snackbar, Alert, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Paper } from '@mui/material';
 
 function SearchTrigger() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -97,6 +97,18 @@ function SearchTrigger() {
           <Box sx={{flex: 1, marginLeft: '8px'}}>
             <Button variant='outlined' style={{ flex: 1}} onClick={() => setUpdateModalOpen(true)}>Update Trigger Name</Button>
           </Box>
+          <TableContainer component={Paper}>
+            <Table aria-label="report attributes">
+              <TableBody>
+                <TableRow>
+                  <TableCell component="th" scope="row">Cron Expression:</TableCell>
+                  <TableCell  align="left" style={{display: 'flex', justifyContent: 'space-between'}}>
+                    {result.cronExpression}
+                  </TableCell>
+                </TableRow>                
+              </TableBody>
+            </Table>
+          </TableContainer>
           <Modal open={updateModalOpen} onClose={() => setUpdateModalOpen(false)}>
             <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 4, p: 4, bgcolor: 'background.paper'}}>
               <TextField label="New Trigger Name" multiline rows={4} variant="outlined" value={newTriggerName} onChange={(e) => setNewTriggerName(e.target.value)} />
@@ -115,7 +127,7 @@ function SearchTrigger() {
                     Trigger Name Successfully Updated
                 </Alert>
             </Snackbar>
-          )}    
+          )}
         </Card>
       ))}            
       </div>
