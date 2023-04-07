@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
+import IconButton from '@material-ui/core/IconButton';
+import CreateIcon from '@material-ui/icons/Create';
+import axios from 'axios';
 
 function SearchSchedule() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [allSchedules, setAllSchedules] = useState([]);
+  const [selectedTrigger, setSelectedTrigger] = useState(null);
+  const [allTriggers, setAllTriggers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [newMail, setNewMail] = useState('');
+  const [addTriggerModal, setAddTriggerModal] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
   const [requestId, setRequestId] = useState('');
@@ -26,6 +32,15 @@ function SearchSchedule() {
   };
 
   useEffect(() => {
+
+    const fetchTriggers = async () => {
+      const triggerData = await fetch('/trigger');
+      const triggerJson = await triggerData.json();
+      console.log(triggerJson);
+      setAllTriggers(triggerJson);
+    };
+    fetchTriggers();
+
     const fetchSchedules = async () => {
         const scheduleData = await fetch('/schedule');
         const scheduleJson = await scheduleData.json();
@@ -62,6 +77,20 @@ function SearchSchedule() {
       console.log(data);
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const addTriggerToReport = async () => {
+    try {
+      const response = await axios.post('/schedule/addTrigger', { 
+        scheduleId: selectedSchedule, 
+        triggerId: selectedTrigger._id});
+      
+      const result = response.data;
+      console.log(result);
+
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
     }
   };
 
@@ -138,12 +167,43 @@ function SearchSchedule() {
                 </TableRow>
                 <TableRow>
                   <TableCell component="th" scope="row">Triggers:</TableCell>
-                  <TableCell align="left">
-                    <ul style={{ margin: 0, paddingInlineStart: '1rem' }}>
-                      {result.triggers.map(trigger => (
-                        <li key={trigger._id}>{trigger.name}</li>
-                      ))}
-                    </ul>
+                  <TableCell align="left" style={{display: 'flex', justifyContent: 'space-between'}}>
+                  {result.triggers.length === 0 ? (
+                      'No Trigger Found'
+                    ) : (
+                      <ul style={{ margin: 0, paddingInlineStart: '1rem' }}>
+                        {result.triggers.map(trigger => (
+                          <li key={trigger._id}>{trigger.name}</li>
+                        ))}
+                      </ul>
+                  )}
+                  <IconButton aria-label='addSchedule' onClick={() => setAddTriggerModal(!addTriggerModal)}>
+                    <CreateIcon />
+                  </IconButton>
+                  <Modal open={addTriggerModal} onClose={() => setAddTriggerModal(false)}>
+                      <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 4, p: 4, bgcolor: 'background.paper'}}>
+                      <Autocomplete
+                            id="search-triggers"
+                            style={{ width: '50%'}}
+                            disablePortal
+                            options={allTriggers}
+                            getOptionLabel={option => option.name}
+                            value={selectedTrigger}
+                            onChange={(event, value) => setSelectedTrigger(value)}
+                            renderInput={params => (
+                            <TextField
+                                {...params}
+                                label="Pick Trigger"
+                                margin='normal'
+                                variant="outlined"
+                                fullWidth
+                            />
+                            )}
+                        />
+                        <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => addTriggerToReport()}>Submit</Button>
+                        <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => setAddTriggerModal(false)}>Cancel</Button>
+                      </Box>
+                  </Modal>
                   </TableCell>
                 </TableRow>
               </TableBody>
