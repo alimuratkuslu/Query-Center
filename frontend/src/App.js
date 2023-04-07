@@ -12,6 +12,7 @@ import SearchReport from './components/Reportss/SearchReport';
 import AddEmployee from './components/Employees/AddEmployee';
 import AddReport from './components/Reportss/AddReport';
 import AddSchedule from './components/Schedules/AddSchedule';
+import UpdateSchedule from './components/Schedules/UpdateSchedule';
 import AddTrigger from './components/Triggers/AddTrigger';
 import AddOwnership from './components/Ownerships/AddOwnership';
 import AddRequest from './components/Requests/AddRequest';
@@ -35,6 +36,7 @@ function App() {
         <Route exact path='/addEmployee' element={<AddEmployee />} />
         <Route exact path='/addReport' element={<AddReport />} />
         <Route exact path='/addSchedule' element={<AddSchedule />} />
+        <Route exact path='/update-schedule/:selectedSchedule' element={<UpdateSchedule />} />
         <Route exact path='/addTrigger' element={<AddTrigger />} />
         <Route exact path='/addOwnership' element={<AddOwnership />} />
         <Route exact path='/addRequest' element={<AddRequest />} />
