@@ -1,6 +1,7 @@
 import './App.css';
 import EmployeeList from './components/Employees/EmployeeList';
 import ReportList from './components/Reportss/ReportList';
+import ReportSchedules from './components/Reportss/ReportSchedules';
 import ScheduleList from './components/Schedules/ScheduleList';
 import TriggerList from './components/Triggers/TriggerList';
 import ReportOwnershipList from './components/Ownerships/ReportOwnershipList';
@@ -24,6 +25,7 @@ function App() {
         <Route exact path='/' element={<Dashboard />} />
         <Route exact path='/employee' element={<EmployeeList />} />
         <Route exact path='/report' element={<ReportList />} />
+        <Route exact path='/report-schedules/:selectedReport' element={<ReportSchedules />} />
         <Route exact path='/schedule' element={<ScheduleList />} />
         <Route exact path='/trigger' element={<TriggerList />} />
         <Route exact path='/ownership' element={<ReportOwnershipList />} />

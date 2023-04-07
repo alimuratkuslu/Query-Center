@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
@@ -8,6 +9,7 @@ import { Mail } from '@mui/icons-material';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import CreateIcon from '@material-ui/icons/Create';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
 function SearchReport() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,6 +27,7 @@ function SearchReport() {
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
   const [queryResult, setQueryResult] = useState([]);
   const [runQueryModal, setRunQueryModal] = useState(false);
+  const navigate = useNavigate();
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [ownerships, setOwnerships] = useState([]);
@@ -165,7 +168,11 @@ function SearchReport() {
       console.error('There was a problem with the fetch operation:', error);
     }
   };
-  
+
+  function showSchedules(selectedReport) {
+    navigate(`/report-schedules/${selectedReport}`);
+  }
+
 
   return (
     <div>
@@ -215,8 +222,10 @@ function SearchReport() {
                           <IconButton onClick={() => setUpdateModalOpen(true)}>
                             <CreateIcon />
                           </IconButton>
-                          <Button variant='outlined' onClick={runQuery}>Run Query</Button>
-                          <IconButton aria-label='mail' onClick={sendEmail}>
+                          <IconButton aria-label='runQuery' onClick={runQuery} >
+                              <PlayCircleIcon />
+                          </IconButton>
+                          <IconButton aria-label='mail' onClick={() => showSchedules(selectedReport)}>
                            <Mail />
                           </IconButton>
                           <Modal open={updateModalOpen} onClose={() => setUpdateModalOpen(false)}>
