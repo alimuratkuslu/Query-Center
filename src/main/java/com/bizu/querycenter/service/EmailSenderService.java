@@ -1,7 +1,6 @@
 package com.bizu.querycenter.service;
 
-import com.bizu.querycenter.model.Employee;
-import com.bizu.querycenter.model.Report;
+import com.bizu.querycenter.model.Schedule;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -26,19 +25,19 @@ public class EmailSenderService {
         this.employeeService = employeeService;
     }
 
-    @Scheduled(cron = "#{@report.getSchedules().get(0).getTriggers().get(0).getCronExpression()}")
-    public void sendEmail(Report report, String filter, String projection) throws MessagingException {
+    @Scheduled(cron = "#{@schedule.getTriggers().get(0).getCronExpression()}")
+    public void sendEmail(Schedule schedule, String filter, String projection) throws MessagingException {
 
         MimeMessage message = javaMailSender.createMimeMessage();
         message.setFrom(new InternetAddress("alimuratkuslu@gmail.com"));
 
-        List<Employee> employees = report.getEmployees();
+        List<String> employeeMails = schedule.getRecipients();
 
-        for (int i = 0; i < employees.size(); i++) {
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(employees.get(i).getEmail().trim()));
+        for (int i = 0; i < employeeMails.size(); i++) {
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(employeeMails.get(i).trim()));
         }
 
-        message.setSubject(report.getSchedules().get(0).getMailSubject());
+        message.setSubject(schedule.getMailSubject());
 
         List<String> results = employeeService.runQuery(filter, projection);
         JSONArray jsonArray = new JSONArray(results);

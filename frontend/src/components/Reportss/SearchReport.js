@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, TableHead, Paper, Modal, Autocomplete, Box, Typography, Snackbar, Alert } from '@mui/material';
 import { Tabs, Tab } from '@mui/material';
@@ -23,7 +22,6 @@ function SearchReport() {
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [newQuery, setNewQuery] = useState('');
   const [requestId, setRequestId] = useState('');
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
   const [queryResult, setQueryResult] = useState([]);
   const [runQueryModal, setRunQueryModal] = useState(false);
@@ -154,21 +152,6 @@ function SearchReport() {
     }
   };
 
-  const sendEmail = async () => {
-    try {
-      const response = await axios.post('/email/sendEmail', { 
-        report: selectedReportObject, 
-        filter: selectedReportQuery, 
-        projection: '{ _id: 1, name: 1, email: 1 }'});
-      setShowSuccessMessage(true);
-      const result = response.data;
-      console.log(result);
-
-    } catch (error) {
-      console.error('There was a problem with the fetch operation:', error);
-    }
-  };
-
   function showSchedules(selectedReport) {
     navigate(`/report-schedules/${selectedReport}`);
   }
@@ -214,7 +197,7 @@ function SearchReport() {
             <Table aria-label="report attributes">
               <TableBody>
                 <TableRow>
-                  <TableCell component="th" scope="row">SQL Query:</TableCell>
+                  <TableCell component="th" scope="row">Details:</TableCell>
                     <TableCell align="left" style={{display: 'flex', justifyContent: 'space-between'}}>
                           <IconButton aria-label='query' onClick={() => setShowModal(!showModal)}>
                             <VisibilityIcon />
@@ -346,16 +329,6 @@ function SearchReport() {
           </Modal>
         </Card>
       ))}
-      <Snackbar
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        open={showSuccessMessage}
-        autoHideDuration={3000}
-        onClose={() => setShowSuccessMessage(false)}
-      >
-        <Alert severity="success" onClose={() => setShowSuccessMessage(false)}>
-            Email sent successfully
-        </Alert>
-        </Snackbar>
       </div>
     </div>
   );

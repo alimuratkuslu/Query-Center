@@ -31,7 +31,7 @@ Please follow the below directions in order to build and run the application wit
 
 ```
 $ cd querycenter
-
+$ docker-compose build
 $ docker-compose up -d
 ```
 
@@ -41,9 +41,7 @@ To build and run the application with Maven, please follow the directions below;
 
 ```
 $ cd querycenter
-
 $ mvn clean install
-
 $ mvn spring-boot:run
 ```
 
