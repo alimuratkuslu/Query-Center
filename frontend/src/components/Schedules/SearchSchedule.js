@@ -177,7 +177,7 @@ function SearchSchedule() {
                         ))}
                       </ul>
                   )}
-                  <IconButton aria-label='addSchedule' onClick={() => setAddTriggerModal(!addTriggerModal)}>
+                  <IconButton style={{ marginRight: '300px'}} aria-label='addSchedule' onClick={() => setAddTriggerModal(!addTriggerModal)}>
                     <CreateIcon />
                   </IconButton>
                   <Modal open={addTriggerModal} onClose={() => setAddTriggerModal(false)}>

@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Autocomplete, Box, Typography } from '@mui/material';
+import { TextField, Button, Card, Table, TableBody, TableCell, TableContainer, TableRow, Paper, Autocomplete, Box, Modal } from '@mui/material';
+import IconButton from '@material-ui/core/IconButton';
+import CreateIcon from '@material-ui/icons/Create';
+import axios from 'axios';
 
 function SearchTeam() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [allTeams, setAllTeams] = useState([]);
-  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [allEmployees, setAllEmployees] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [addEmployeeModal, setAddEmployeeModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState(null);
-  const [showUpdateSuccess, setShowUpdateSuccess] = useState(false);
 
   const handleSearch = async () => {
     try {
@@ -25,6 +29,15 @@ function SearchTeam() {
   };
 
   useEffect(() => {
+
+    const fetchEmployees = async () => {
+      const employeeData = await fetch('/employee');
+      const employeeJson = await employeeData.json();
+      console.log(employeeJson);
+      setAllEmployees(employeeJson);
+  };
+  fetchEmployees();
+
     const fetchTeams = async () => {
         const teamData = await fetch('/team');
         const teamJson = await teamData.json();
@@ -43,6 +56,20 @@ function SearchTeam() {
       setSearchTerm(value.name);
     } else {
       setSearchTerm("");
+    }
+  };
+
+  const addEmployeeToTeam = async () => {
+    try {
+      const response = await axios.post('/team/addEmployee', { 
+        employeeId: selectedEmployee._id, 
+        teamId: selectedTeam});
+      
+      const result = response.data;
+      console.log(result);
+
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
     }
   };
 
@@ -83,11 +110,42 @@ function SearchTeam() {
                 <TableRow>
                   <TableCell component="th" scope="row">Employees</TableCell>
                   <TableCell align="left">
-                    <ul style={{ margin: 0, paddingInlineStart: '1rem' }}>
-                      {result.employees.map(employee => (
-                        <li key={employee._id}>{employee.name}</li>
-                      ))}
-                    </ul>
+                      {result.employees.length === 0 ? (
+                        'No Employees Found'
+                        ) : (
+                        <ul style={{ margin: 0, paddingInlineStart: '1rem' }}>
+                          {result.employees.map(employee => (
+                            <li key={employee._id}>{employee.name}</li>
+                          ))}
+                        </ul>
+                    )}
+                    <IconButton style={{ marginRight: '300px'}} aria-label='addEmployee' onClick={() => setAddEmployeeModal(!addEmployeeModal)}>
+                      <CreateIcon />
+                    </IconButton>
+                    <Modal open={addEmployeeModal} onClose={() => setAddEmployeeModal(false)}>
+                      <Box sx={{position: 'absolute', top: '35%', left: '35%', width: 400, boxShadow: 4, p: 4, bgcolor: 'background.paper'}}>
+                      <Autocomplete
+                            id="search-employees"
+                            style={{ width: '50%'}}
+                            disablePortal
+                            options={allEmployees}
+                            getOptionLabel={option => option.name}
+                            value={selectedEmployee}
+                            onChange={(event, value) => setSelectedEmployee(value)}
+                            renderInput={params => (
+                            <TextField
+                                {...params}
+                                label="Pick Employee"
+                                margin='normal'
+                                variant="outlined"
+                                fullWidth
+                            />
+                            )}
+                        />
+                        <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => addEmployeeToTeam()}>Submit</Button>
+                        <Button variant='contained' color='primary' style={{ marginLeft: '1rem' }} onClick={() => setAddEmployeeModal(false)}>Cancel</Button>
+                      </Box>
+                  </Modal>
                   </TableCell>
                 </TableRow>
                 <TableRow>
