@@ -6,15 +6,17 @@ import Dashboard from '../Dashboard';
 const AddReport = () => {
   const [name, setName] = useState('');
   const [sqlQuery, setSqlQuery] = useState('');
+  const [databaseName, setDatabaseName] = useState('');
   const [requestId, setRequestId] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const handleSubmit = async (e) => {
     setShowSuccessMessage(true);
     e.preventDefault();
-      const response = await axios.post('/report', { name, sqlQuery });
+      const response = await axios.post('/report', { name, sqlQuery, databaseName });
       setName('');
       setSqlQuery('');
+      setDatabaseName('');
       console.log(response.data);
       console.log("Report saved successfully");
   };
@@ -47,6 +49,17 @@ const AddReport = () => {
                     required
                     value={sqlQuery}
                     onChange={(e) => setSqlQuery(e.target.value)}
+                />
+            </div>
+            <br />
+            <div>
+                <TextField
+                    label="Database Name"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={databaseName}
+                    onChange={(e) => setDatabaseName(e.target.value)}
                 />
             </div>
             <br />

@@ -100,7 +100,7 @@ function ReportSchedules() {
                 />
                 )}
             />
-            <Button style={{marginRight: '1000px'}} variant='contained' type='submit' onClick={addScheduleToReport}>Add Schedule</Button>
+            <Button style={{marginRight: '1300px'}} variant='contained' type='submit' onClick={addScheduleToReport}>Add Schedule</Button>
         </div>
         <br />
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

@@ -51,6 +51,7 @@ public class TeamService {
                 ._id(size)
                 .name(request.getName())
                 .teamMail(request.getTeamMail())
+                .employees(null)
                 .build();
 
         Team fromDB = teamRepository.save(team);

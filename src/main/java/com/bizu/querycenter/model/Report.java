@@ -24,6 +24,8 @@ public class Report {
 
     private String sqlQuery;
 
+    private String databaseName;
+
     @DBRef
     private List<Employee> employees;
 

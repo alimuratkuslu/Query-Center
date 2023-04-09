@@ -9,4 +9,6 @@ public class SaveReportRequest {
 
     private String name;
     private String sqlQuery;
+
+    private String databaseName;
 }

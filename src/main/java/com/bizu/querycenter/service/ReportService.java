@@ -59,6 +59,7 @@ public class ReportService {
                 ._id(size)
                 .name(request.getName())
                 .sqlQuery(request.getSqlQuery())
+                .databaseName(request.getDatabaseName())
                 .employees(employees)
                 .schedules(schedules)
                 .isActive(true)
@@ -111,6 +112,8 @@ public class ReportService {
         Report currentReport = reportRepository.findById(id).orElseThrow(RuntimeException::new);
 
         currentReport.setName(request.getName());
+        currentReport.setSqlQuery(request.getSqlQuery());
+        currentReport.setDatabaseName(request.getDatabaseName());
 
         reportRepository.save(currentReport);
 

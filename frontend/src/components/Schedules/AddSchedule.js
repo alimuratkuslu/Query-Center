@@ -9,6 +9,8 @@ const AddSchedule = () => {
   const [recipients, setRecipients] = useState([]);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [employees, setEmployees] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState(null);
   const [triggers, setTriggers] = useState([]);
   const [requestId, setRequestId] = useState('');
   const [selectedTriggers, setSelectedTriggers] = useState([]);
@@ -23,6 +25,14 @@ const AddSchedule = () => {
     };
     fetchEmployees();
 
+    const fetchTeams = async () => {
+        const teamData = await fetch('/team');
+        const teamJson = await teamData.json();
+        console.log(teamJson);
+        setTeams(teamJson);
+    };
+    fetchTeams();
+
     const fetchTriggers = async () => {
         const triggerData = await fetch('/trigger');
         const triggerJson = await triggerData.json();
@@ -36,7 +46,8 @@ const AddSchedule = () => {
   const handleSubmit = async (e) => {
     setShowSuccessMessage(true);
     e.preventDefault();
-      const recipientNames = recipients.map((recipient) => recipient.name);
+      const recipientNames = recipients.map((recipient) => recipient.email);
+      recipientNames.push(selectedTeam.teamMail);
       const response = await axios.post('/schedule', { name, mailSubject, recipients: recipientNames, triggers: selectedTriggers });
       setName('');
       setMailSubject('');
@@ -90,6 +101,27 @@ const AddSchedule = () => {
                         <TextField 
                         {...params} 
                         label="Pick Recipients"
+                        margin='normal'
+                        style={{ width: '300px'}}
+                        variant="outlined" 
+                    />
+                    )}
+                />
+            </div>
+            <br />
+            <div>
+                <Autocomplete
+                    id="search-teams"
+                    style={{ width: '100%'}}
+                    disablePortal
+                    options={teams}
+                    getOptionLabel={option => option.name}
+                    value={selectedTeam}
+                    onChange={(event, value) => setSelectedTeam(value)}
+                    renderInput={(params) => (
+                        <TextField 
+                        {...params} 
+                        label="Pick Team"
                         margin='normal'
                         style={{ width: '300px'}}
                         variant="outlined" 

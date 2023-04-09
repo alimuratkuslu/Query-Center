@@ -6,9 +6,6 @@ import SearchReport from './SearchReport';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@material-ui/core/IconButton';
 import { Checkbox } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 
 const columns = [
   { field: '_id', headerName: 'ID', width: 70 },
