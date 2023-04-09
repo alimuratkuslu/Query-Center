@@ -37,8 +37,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/runQuery")
-    public ResponseEntity<List<String>> runQuery(@RequestParam String filter, @RequestParam String projection){
-        return ResponseEntity.ok(employeeService.runQuery(filter, projection));
+    public ResponseEntity<List<String>> runQuery(@RequestParam String filter, @RequestParam String databaseName){
+        return ResponseEntity.ok(employeeService.runQuery(filter, databaseName));
     }
 
     @PostMapping

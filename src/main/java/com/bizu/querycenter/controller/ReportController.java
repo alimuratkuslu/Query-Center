@@ -6,7 +6,6 @@ import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.ReportService;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +16,9 @@ import java.util.List;
 public class ReportController {
 
     private final ReportService reportService;
-    private final MongoTemplate mongoTemplate;
 
-    public ReportController(ReportService reportService, MongoTemplate mongoTemplate) {
+    public ReportController(ReportService reportService) {
         this.reportService = reportService;
-        this.mongoTemplate = mongoTemplate;
     }
 
     @GetMapping("/{id}")

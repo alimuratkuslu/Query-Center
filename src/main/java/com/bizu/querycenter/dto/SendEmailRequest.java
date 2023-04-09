@@ -14,5 +14,5 @@ public class SendEmailRequest {
 
     private Schedule schedule;
     private String filter;
-    private String projection;
+    private String databaseName;
 }

@@ -16,6 +16,7 @@ function SearchReport() {
   const [allReports, setAllReports] = useState([]);
   const [selectedReportObject, setSelectedReportObject] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [selectedReportDatabase, setSelectedReportDatabase] = useState('');
   const [selectedReportQuery, setSelectedReportQuery] = useState(null);
   const [selectedReportName, setSelectedReportName] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -41,6 +42,7 @@ function SearchReport() {
       setSelectedReport(data._id);
       setSelectedReportName(data.name);
       setSelectedReportQuery(data.sqlQuery);
+      setSelectedReportDatabase(data.database.name);
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
@@ -129,9 +131,12 @@ function SearchReport() {
   };
 
   const runQuery = async () => {
+    console.log("Database name: ", selectedReportDatabase);
     setRunQueryModal(true);
-    const query = { filter: selectedReportQuery, projection: '{ _id: 1, name: 1, email: 1 }'};
-    
+    const query = { 
+       filter: selectedReportQuery,
+       databaseName: selectedReportDatabase
+      };
     const queryParams = new URLSearchParams(query).toString();
 
     try {
@@ -246,7 +251,7 @@ function SearchReport() {
                 <TableRow>
                   <TableCell component="th" scope="row">Database Name:</TableCell>
                   <TableCell align="left">
-                    {result.databaseName}
+                    {result.database.name}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -314,8 +319,35 @@ function SearchReport() {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
+                  {selectedReportDatabase !== 'Requests' && <TableCell>Name</TableCell>}
+                  {selectedReportDatabase === 'Employees' && <TableCell>Email</TableCell>}
+                  {selectedReportDatabase === 'Reports' && (
+                    <>
+                      <TableCell>SQL Query</TableCell>
+                      <TableCell>Active</TableCell>
+                    </>
+                  )}
+                  {selectedReportDatabase === 'Requests' && (
+                    <>
+                      <TableCell>Description</TableCell>
+                      <TableCell>Status</TableCell>
+                    </>
+                  )}
+                  {selectedReportDatabase === 'Schedules' && (
+                    <>
+                      <TableCell>Mail Subject</TableCell>
+                    </>
+                  )}
+                  {selectedReportDatabase === 'Teams' && (
+                    <>
+                      <TableCell>Team Mail</TableCell>
+                    </>
+                  )}
+                  {selectedReportDatabase === 'Triggers' && (
+                    <>
+                      <TableCell>Cron Expression</TableCell>
+                    </>
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -324,8 +356,35 @@ function SearchReport() {
                   return(
                     <TableRow key={rowData._id}>
                       <TableCell>{rowData._id}</TableCell>
-                      <TableCell>{rowData.name}</TableCell>
-                      <TableCell>{rowData.email}</TableCell>
+                      {selectedReportDatabase !== 'Requests' && <TableCell>{rowData.name}</TableCell>}
+                      {selectedReportDatabase === 'Employees' && <TableCell>{rowData.email}</TableCell>}
+                      {selectedReportDatabase === 'Reports' && (
+                        <>
+                          <TableCell>{rowData.sqlQuery}</TableCell>
+                          <TableCell>{rowData.isActive}</TableCell>
+                        </>
+                      )}
+                      {selectedReportDatabase === 'Requests' && (
+                        <>
+                          <TableCell>{rowData.description}</TableCell>
+                          <TableCell>{rowData.status}</TableCell>
+                        </>
+                      )}
+                      {selectedReportDatabase === 'Schedules' && (
+                        <>
+                          <TableCell>{rowData.mailSubject}</TableCell>
+                        </>
+                      )}
+                      {selectedReportDatabase === 'Teams' && (
+                        <>
+                          <TableCell>{rowData.teamMail}</TableCell>
+                        </>
+                      )}
+                      {selectedReportDatabase === 'Triggers' && (
+                        <>
+                          <TableCell>{rowData.cronExpression}</TableCell>
+                        </>
+                      )}
                   </TableRow>
                   );
                 })}

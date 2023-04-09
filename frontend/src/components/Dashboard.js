@@ -13,6 +13,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import CopyrightIcon from '@mui/icons-material/Copyright';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
 import GroupIcon from '@mui/icons-material/Group';
+import StorageIcon from '@mui/icons-material/Storage';
 
 const Dashboard = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -136,6 +137,12 @@ const Dashboard = () => {
               <GroupIcon />
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Teams" />
+          </ListItem>
+          <ListItem button component={Link} to="/database" onClick={() => handlePageChange('Databases')}>
+            <ListItemIcon>
+              <StorageIcon />
+            </ListItemIcon>
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Databases" />
           </ListItem>
           <ListItem button component={Link} to="/searchReport" onClick={() => handlePageChange('Search Reports')}>
             <ListItemIcon>

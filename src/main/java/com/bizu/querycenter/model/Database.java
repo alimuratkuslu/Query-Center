@@ -14,25 +14,16 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Data
-@Document("Reports")
-public class Report {
+@Document("Database")
+public class Database {
 
     @Id
     private Integer _id;
 
     private String name;
 
-    private String sqlQuery;
+    private String connectionString;
 
     @DBRef
-    private Database database;
-
-    @DBRef
-    private List<Employee> employees;
-
-    @DBRef
-    private List<Schedule> schedules;
-
-    private boolean isActive;
-
+    private List<Report> reports;
 }

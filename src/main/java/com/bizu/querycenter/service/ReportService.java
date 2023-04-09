@@ -4,6 +4,7 @@ import com.bizu.querycenter.dto.Add.AddQueryToReport;
 import com.bizu.querycenter.dto.Add.AddScheduleToReport;
 import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.dto.Response.ReportResponse;
+import com.bizu.querycenter.model.Database;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.Schedule;
@@ -22,10 +23,13 @@ public class ReportService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleService scheduleService;
 
-    public ReportService(ReportRepository reportRepository, ScheduleRepository scheduleRepository, ScheduleService scheduleService) {
+    private final DatabaseService databaseService;
+
+    public ReportService(ReportRepository reportRepository, ScheduleRepository scheduleRepository, ScheduleService scheduleService, DatabaseService databaseService) {
         this.reportRepository = reportRepository;
         this.scheduleRepository = scheduleRepository;
         this.scheduleService = scheduleService;
+        this.databaseService = databaseService;
     }
 
     public Report getReportById(Integer id){
@@ -53,13 +57,15 @@ public class ReportService {
         List<Employee> employees = new ArrayList<>();
         List<Schedule> schedules = new ArrayList<>();
 
+        Database database = databaseService.getDatabaseByName(request.getDatabaseName());
+
         int size = reports.size() + 2;
 
         Report report = Report.builder()
                 ._id(size)
                 .name(request.getName())
                 .sqlQuery(request.getSqlQuery())
-                .databaseName(request.getDatabaseName())
+                .database(database)
                 .employees(employees)
                 .schedules(schedules)
                 .isActive(true)
@@ -110,10 +116,11 @@ public class ReportService {
 
     public ReportResponse updateReport(Integer id, SaveReportRequest request){
         Report currentReport = reportRepository.findById(id).orElseThrow(RuntimeException::new);
+        Database database = databaseService.getDatabaseByName(request.getDatabaseName());
 
         currentReport.setName(request.getName());
         currentReport.setSqlQuery(request.getSqlQuery());
-        currentReport.setDatabaseName(request.getDatabaseName());
+        currentReport.setDatabase(database);
 
         reportRepository.save(currentReport);
 

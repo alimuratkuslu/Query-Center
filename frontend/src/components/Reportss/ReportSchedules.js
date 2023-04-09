@@ -15,6 +15,7 @@ function ReportSchedules() {
   const [allSchedules, setAllSchedules] = useState([]);
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [selectedReportName, setSelectedReportName] = useState('');
+  const [selectedReportDatabase, setSelectedReportDatabase] = useState('');
   const [selectedReportObject, setSelectedReportObject] = useState(null);
   const [selectedReportQuery, setSelectedReportQuery] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -36,6 +37,7 @@ function ReportSchedules() {
         await setSelectedReportName(scheduleJson.name);
         await setSelectedReportObject(scheduleJson); 
         await setSelectedReportQuery(scheduleJson.sqlQuery);
+        await setSelectedReportDatabase(scheduleJson.database.name);
         console.log("Selected Report Name: ", selectedReportName);
     };
     fetchReportSchedules();
@@ -48,7 +50,8 @@ function ReportSchedules() {
         report: selectedReportObject, 
         schedule: schedule,
         filter: selectedReportQuery, 
-        projection: '{ _id: 1, name: 1, email: 1 }'});
+        databaseName: selectedReportDatabase
+      });
       setShowSuccessMessage(true);
       const result = response.data;
       console.log(result);
@@ -100,7 +103,7 @@ function ReportSchedules() {
                 />
                 )}
             />
-            <Button style={{marginRight: '1300px'}} variant='contained' type='submit' onClick={addScheduleToReport}>Add Schedule</Button>
+            <Button style={{marginRight: '950px'}} variant='contained' type='submit' onClick={addScheduleToReport}>Add Schedule</Button>
         </div>
         <br />
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

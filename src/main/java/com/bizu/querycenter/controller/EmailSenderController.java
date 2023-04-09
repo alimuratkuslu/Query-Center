@@ -20,7 +20,7 @@ public class EmailSenderController {
 
     @PostMapping("/sendEmail")
     public String sendEmail(@RequestBody SendEmailRequest request) throws MessagingException {
-        emailSenderService.sendEmail(request.getSchedule(), request.getFilter(), request.getProjection());
+        emailSenderService.sendEmail(request.getSchedule(), request.getFilter(), request.getDatabaseName());
 
         return "Message Sent!";
     }

@@ -1,4 +1,5 @@
 import './App.css';
+import DatabaseList from './components/Databases/DatabaseList';
 import EmployeeList from './components/Employees/EmployeeList';
 import ReportList from './components/Reportss/ReportList';
 import ReportSchedules from './components/Reportss/ReportSchedules';
@@ -9,6 +10,7 @@ import RequestList from './components/Requests/RequestList';
 import TeamList from './components/Teams/TeamList';
 import Dashboard from './components/Dashboard';
 import SearchReport from './components/Reportss/SearchReport';
+import AddDatabase from './components/Databases/AddDatabase';
 import AddEmployee from './components/Employees/AddEmployee';
 import AddReport from './components/Reportss/AddReport';
 import AddSchedule from './components/Schedules/AddSchedule';
@@ -32,6 +34,7 @@ function App() {
         <Route exact path='/ownership' element={<ReportOwnershipList />} />
         <Route exact path='/request' element={<RequestList />} />
         <Route exact path='/team' element={<TeamList />} />
+        <Route exact path='/database' element={<DatabaseList />} />
         <Route exact path='/searchReport' element={<SearchReport />} />
         <Route exact path='/addEmployee' element={<AddEmployee />} />
         <Route exact path='/addReport' element={<AddReport />} />
@@ -41,6 +44,7 @@ function App() {
         <Route exact path='/addOwnership' element={<AddOwnership />} />
         <Route exact path='/addRequest' element={<AddRequest />} />
         <Route exact path='/addTeam' element={<AddTeam />} />
+        <Route exact path='/addDatabase' element={<AddDatabase />} />
       </Routes>
     </Router>
   );

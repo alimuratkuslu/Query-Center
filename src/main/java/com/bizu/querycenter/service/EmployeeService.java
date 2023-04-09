@@ -53,16 +53,37 @@ public class EmployeeService {
         return employee;
     }
 
-    public List<String> runQuery(String filter, String projection){
+    public List<String> runQuery(String filter, String databaseName){
+        String projection = "";
+
+        if(databaseName.equals("Employees")){
+            projection = "{ _id: 1, name: 1, email: 1 }";
+        }
+        else if(databaseName.equals("Reports")){
+            projection = "{ _id: 1, name: 1, sqlQuery: 1, isActive: 1 }";
+        }
+        else if(databaseName.equals("Requests")){
+            projection = "{ _id: 1, description: 1, status: 1 }";
+        }
+        else if(databaseName.equals("Schedules")){
+            projection = "{ _id: 1, name: 1, mailSubject: 1 }";
+        }
+        else if(databaseName.equals("Teams")){
+            projection = "{ _id: 1, name: 1, teamMail: 1 }";
+        }
+        else if(databaseName.equals("Triggers")){
+            projection = "{ _id: 1, name: 1, cronExpression: 1}";
+        }
 
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString("mongodb+srv://alimuratkuslu:alis2001@movieapi.urlccoc.mongodb.net/test"))
                 .retryWrites(true)
                 .build();
+
         MongoClient mongoClient = MongoClients.create(settings);
         MongoDatabase database = mongoClient.getDatabase("QueryCenter");
 
-        MongoCollection<Document> collection = database.getCollection("Employees");
+        MongoCollection<Document> collection = database.getCollection(databaseName);
 
         FindIterable<Document> cursor = collection.find(Document.parse(filter)).projection(Document.parse(projection));
 

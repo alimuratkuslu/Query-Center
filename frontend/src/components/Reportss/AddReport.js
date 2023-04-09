@@ -1,22 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { TextField, Button, Typography, Snackbar, Alert } from '@mui/material';
+import { TextField, Button, Typography, Snackbar, Alert, Autocomplete } from '@mui/material';
 import Dashboard from '../Dashboard';
 
 const AddReport = () => {
   const [name, setName] = useState('');
   const [sqlQuery, setSqlQuery] = useState('');
-  const [databaseName, setDatabaseName] = useState('');
+  const [databases, setDatabases] = useState([]);
+  const [selectedDatabase, setSelectedDatabase] = useState(null);
   const [requestId, setRequestId] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
+  useEffect(() => {
+
+    const fetchDatabases = async () => {
+        const databaseData = await fetch('/database');
+        const databaseJson = await databaseData.json();
+        console.log(databaseJson);
+        setDatabases(databaseJson);
+    };
+    fetchDatabases();
+
+  }, []);
+
   const handleSubmit = async (e) => {
+    console.log("Selected database name: ", selectedDatabase.name);
     setShowSuccessMessage(true);
     e.preventDefault();
-      const response = await axios.post('/report', { name, sqlQuery, databaseName });
+      const response = await axios.post('/report', { name, sqlQuery, databaseName: selectedDatabase.name});
       setName('');
       setSqlQuery('');
-      setDatabaseName('');
       console.log(response.data);
       console.log("Report saved successfully");
   };
@@ -53,13 +66,23 @@ const AddReport = () => {
             </div>
             <br />
             <div>
-                <TextField
-                    label="Database Name"
-                    variant="outlined"
-                    fullWidth
-                    required
-                    value={databaseName}
-                    onChange={(e) => setDatabaseName(e.target.value)}
+                <Autocomplete
+                    id="search-databases"
+                    style={{ width: '100%'}}
+                    disablePortal
+                    options={databases}
+                    getOptionLabel={option => option.name}
+                    value={selectedDatabase}
+                    onChange={(event, value) => setSelectedDatabase(value)}
+                    renderInput={(params) => (
+                        <TextField 
+                        {...params} 
+                        label="Pick Database"
+                        margin='normal'
+                        style={{ width: '300px'}}
+                        variant="outlined" 
+                    />
+                    )}
                 />
             </div>
             <br />
