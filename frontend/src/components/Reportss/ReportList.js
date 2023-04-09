@@ -11,6 +11,7 @@ const columns = [
   { field: '_id', headerName: 'ID', width: 70 },
   { field: 'name', headerName: 'Report Name', width: 130 },
   { field: 'sqlQuery', headerName: 'SQL Query', width: 130 },
+  { field: 'databaseName', headerName: 'Database', width: 130 },
   {
     field: 'employees',
     headerName: 'Employees',

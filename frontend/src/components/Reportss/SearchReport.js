@@ -244,6 +244,12 @@ function SearchReport() {
                   </TableCell>
                 </TableRow>
                 <TableRow>
+                  <TableCell component="th" scope="row">Database Name:</TableCell>
+                  <TableCell align="left">
+                    {result.databaseName}
+                  </TableCell>
+                </TableRow>
+                <TableRow>
                   <TableCell component="th" scope="row">Active Status:</TableCell>
                   <TableCell align="left">
                     <Checkbox checked={result.active} disabled />
