@@ -6,6 +6,7 @@ import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.service.ReportService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,9 @@ public class ReportController {
 
     @PostMapping
     public ResponseEntity<ReportResponse> saveReport(@RequestBody SaveReportRequest request){
-        return ResponseEntity.ok(reportService.saveReport(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reportService.saveReport(request));
     }
 
     @PostMapping("/addQuery/{reportId}")

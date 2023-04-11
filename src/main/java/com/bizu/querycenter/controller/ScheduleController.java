@@ -6,6 +6,7 @@ import com.bizu.querycenter.dto.Request.SaveScheduleRequest;
 import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.service.ScheduleService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,9 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<ScheduleResponse> saveSchedule(@RequestBody SaveScheduleRequest request){
-        return ResponseEntity.ok(scheduleService.saveSchedule(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(scheduleService.saveSchedule(request));
     }
 
     @PostMapping("/addSubject/{scheduleId}")

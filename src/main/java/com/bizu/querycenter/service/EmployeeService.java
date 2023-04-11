@@ -117,6 +117,7 @@ public class EmployeeService {
         return EmployeeResponse.builder()
                 .name(fromDB.getName())
                 .email(fromDB.getEmail())
+                .reports(fromDB.getReports())
                 .build();
     }
 

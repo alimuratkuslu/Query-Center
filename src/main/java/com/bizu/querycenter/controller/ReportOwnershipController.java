@@ -3,6 +3,7 @@ package com.bizu.querycenter.controller;
 import com.bizu.querycenter.dto.Request.SaveOwnershipRequest;
 import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.service.ReportOwnershipService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,8 @@ public class ReportOwnershipController {
 
     @PostMapping
     public ResponseEntity<ReportOwnership> saveOwnership(@RequestBody SaveOwnershipRequest request){
-        return ResponseEntity.ok(service.saveOwnership(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(service.saveOwnership(request));
     }
 }

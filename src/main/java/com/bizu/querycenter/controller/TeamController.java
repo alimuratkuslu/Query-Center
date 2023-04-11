@@ -1,14 +1,11 @@
 package com.bizu.querycenter.controller;
 
 import com.bizu.querycenter.dto.Add.AddEmployeeToTeam;
-import com.bizu.querycenter.dto.Request.SaveRequestRequest;
 import com.bizu.querycenter.dto.Request.SaveTeamRequest;
-import com.bizu.querycenter.dto.Response.RequestResponse;
 import com.bizu.querycenter.dto.Response.TeamResponse;
-import com.bizu.querycenter.model.Employee;
-import com.bizu.querycenter.model.Request;
 import com.bizu.querycenter.model.Team;
 import com.bizu.querycenter.service.TeamService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +38,9 @@ public class TeamController {
 
     @PostMapping
     public ResponseEntity<TeamResponse> saveTeam(@RequestBody SaveTeamRequest request){
-        return ResponseEntity.ok(teamService.saveTeam(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(teamService.saveTeam(request));
     }
 
     @PutMapping("/{id}")

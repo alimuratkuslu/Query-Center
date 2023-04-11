@@ -1,13 +1,10 @@
 package com.bizu.querycenter.controller;
 
-import com.bizu.querycenter.dto.Request.SaveReportRequest;
 import com.bizu.querycenter.dto.Request.SaveRequestRequest;
-import com.bizu.querycenter.dto.Response.ReportResponse;
 import com.bizu.querycenter.dto.Response.RequestResponse;
-import com.bizu.querycenter.model.Employee;
-import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.Request;
 import com.bizu.querycenter.service.RequestService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +38,9 @@ public class RequestController {
 
     @PostMapping
     public ResponseEntity<RequestResponse> saveRequest(@RequestBody SaveRequestRequest request){
-        return ResponseEntity.ok(requestService.saveRequest(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(requestService.saveRequest(request));
     }
 
     @PutMapping("/{id}")

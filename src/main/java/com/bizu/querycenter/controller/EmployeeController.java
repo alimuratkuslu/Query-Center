@@ -6,6 +6,7 @@ import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
 import com.bizu.querycenter.dto.Response.EmployeeResponse;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.service.EmployeeService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,9 @@ public class EmployeeController {
 
     @PostMapping
     public ResponseEntity<EmployeeResponse> saveEmployee(@RequestBody SaveEmployeeRequest request){
-        return ResponseEntity.ok(employeeService.saveEmployee(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(employeeService.saveEmployee(request));
     }
 
     @PostMapping("/addReport")

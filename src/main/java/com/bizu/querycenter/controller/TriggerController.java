@@ -1,13 +1,11 @@
 package com.bizu.querycenter.controller;
 
 import com.bizu.querycenter.dto.Add.AddNameToTrigger;
-import com.bizu.querycenter.dto.Add.AddSubjectToSchedule;
 import com.bizu.querycenter.dto.Request.SaveTriggerRequest;
-import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.dto.Response.TriggerResponse;
-import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.model.Trigger;
 import com.bizu.querycenter.service.TriggerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +38,9 @@ public class TriggerController {
 
     @PostMapping
     public ResponseEntity<TriggerResponse> saveTrigger(@RequestBody SaveTriggerRequest request){
-        return ResponseEntity.ok(triggerService.saveTrigger(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(triggerService.saveTrigger(request));
     }
 
     @PostMapping("/addName/{triggerId}")

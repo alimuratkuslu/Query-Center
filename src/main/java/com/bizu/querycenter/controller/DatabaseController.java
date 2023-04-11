@@ -5,6 +5,7 @@ import com.bizu.querycenter.dto.Request.SaveDatabaseRequest;
 import com.bizu.querycenter.dto.Response.DatabaseResponse;
 import com.bizu.querycenter.model.Database;
 import com.bizu.querycenter.service.DatabaseService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,9 @@ public class DatabaseController {
 
     @PostMapping
     public ResponseEntity<DatabaseResponse> saveDatabase(@RequestBody SaveDatabaseRequest request){
-        return ResponseEntity.ok(databaseService.saveDatabase(request));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(databaseService.saveDatabase(request));
     }
 
     @PutMapping("/{id}")
