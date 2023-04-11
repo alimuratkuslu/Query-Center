@@ -162,6 +162,9 @@ function SearchReport() {
     navigate(`/report-schedules/${selectedReport}`);
   }
 
+  function addOwnership() {
+    navigate(`/addOwnership`);
+  }
 
   return (
     <div>
@@ -270,6 +273,11 @@ function SearchReport() {
           {selectedTab === 1 && (
             <TableContainer component={Paper}>
             <Table aria-label="ownership attributes">
+              <TableRow>
+                  <TableCell align="left">
+                    <Button variant='outlined' onClick={addOwnership}> Add Ownership </Button>
+                  </TableCell>
+                </TableRow>
               <TableBody>            
                 <br />                               
                 <div style={{ height: '65vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
