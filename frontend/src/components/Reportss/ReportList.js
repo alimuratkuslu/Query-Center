@@ -11,7 +11,14 @@ const columns = [
   { field: '_id', headerName: 'ID', width: 70 },
   { field: 'name', headerName: 'Report Name', width: 130 },
   { field: 'sqlQuery', headerName: 'SQL Query', width: 130 },
-  { field: 'databaseName', headerName: 'Database', width: 130 },
+  { field: 'database.name', headerName: 'Database', width: 130, valueGetter: (params) => {
+      if (params.row.database) {
+        return params.row.database.name;
+      } else {
+        return "-";
+      }
+    }, 
+  },
   {
     field: 'employees',
     headerName: 'Employees',

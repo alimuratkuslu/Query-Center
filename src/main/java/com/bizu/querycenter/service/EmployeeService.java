@@ -109,6 +109,7 @@ public class EmployeeService {
                 .name(request.getName())
                 .email(request.getEmail())
                 .reports(reports)
+                .isActive(true)
                 .build();
 
         Employee fromDB = employeeRepository.save(employee);
@@ -325,6 +326,21 @@ public class EmployeeService {
         else{
             throw new RuntimeException("Employee does not exist");
         }
+    }
+
+    public void activateEmployee(Integer id){
+        changeEmployeeStatus(id, true);
+    }
+
+    public void deactivateEmployee(Integer id){
+        changeEmployeeStatus(id, false);
+    }
+
+    private void changeEmployeeStatus(Integer id, Boolean isActive){
+        Employee currentEmployee = getEmployeeById(id);
+
+        currentEmployee.setActive(isActive);
+        employeeRepository.save(currentEmployee);
     }
 
     private boolean doesEmployeeExist(Integer id){

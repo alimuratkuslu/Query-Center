@@ -86,6 +86,16 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.updateEmployee(id, request));
     }
 
+    @PatchMapping("/{id}")
+    public void deactivateEmployee(@PathVariable Integer id){
+        employeeService.deactivateEmployee(id);
+    }
+
+    @PatchMapping("/activate/{id}")
+    public void activateEmployee(@PathVariable Integer id){
+        employeeService.activateEmployee(id);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteEmployee(@PathVariable Integer id){
         employeeService.deleteEmployeeById(id);

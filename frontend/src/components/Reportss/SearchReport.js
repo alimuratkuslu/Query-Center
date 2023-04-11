@@ -42,7 +42,9 @@ function SearchReport() {
       setSelectedReport(data._id);
       setSelectedReportName(data.name);
       setSelectedReportQuery(data.sqlQuery);
-      setSelectedReportDatabase(data.database.name);
+      if (data.database) {
+        setSelectedReportDatabase(data.database.name);
+      }
       setSearchResults(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error(error);
@@ -131,7 +133,6 @@ function SearchReport() {
   };
 
   const runQuery = async () => {
-    console.log("Database name: ", selectedReportDatabase);
     setRunQueryModal(true);
     const query = { 
        filter: selectedReportQuery,
@@ -251,7 +252,7 @@ function SearchReport() {
                 <TableRow>
                   <TableCell component="th" scope="row">Database Name:</TableCell>
                   <TableCell align="left">
-                    {result.database.name}
+                    {result.database ? result.database.name : "No Database"}
                   </TableCell>
                 </TableRow>
                 <TableRow>
