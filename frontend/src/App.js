@@ -1,4 +1,5 @@
 import './App.css';
+import LoginPage from './components/LoginPage';
 import DatabaseList from './components/Databases/DatabaseList';
 import EmployeeList from './components/Employees/EmployeeList';
 import ReportList from './components/Reportss/ReportList';
@@ -25,6 +26,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route exact path='/login' element={<LoginPage />} />
         <Route exact path='/' element={<Dashboard />} />
         <Route exact path='/employee' element={<EmployeeList />} />
         <Route exact path='/report' element={<ReportList />} />
