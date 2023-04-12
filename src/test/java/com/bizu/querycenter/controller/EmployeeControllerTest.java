@@ -10,6 +10,7 @@ import com.bizu.querycenter.service.EmployeeService;
 import com.bizu.querycenter.service.ReportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,9 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,6 +47,59 @@ class EmployeeControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private Employee employeeActive;
+
+    private Employee employeeNotActive;
+
+    private SaveEmployeeRequest saveEmployeeRequest;
+
+    private SaveEmployeeRequest updateEmployeeRequest;
+
+    private EmployeeResponse employeeResponse;
+
+    private EmployeeResponse updatedEmployeeResponse;
+
+    @BeforeEach
+    public void init(){
+        employeeActive = Employee.builder()
+                ._id(1)
+                .name("testName")
+                .email("test@gmail.com")
+                .reports(null)
+                .isActive(true)
+                .build();
+
+        employeeNotActive = Employee.builder()
+                ._id(2)
+                .name("deactiveName")
+                .email("deactiveEmail@gmail.com")
+                .reports(null)
+                .isActive(false)
+                .build();
+
+        saveEmployeeRequest = SaveEmployeeRequest.builder()
+                .name("testName")
+                .email("test@gmail.com")
+                .build();
+
+        updateEmployeeRequest = SaveEmployeeRequest.builder()
+                .name("testName1")
+                .email("test1@gmail.com")
+                .build();
+
+        employeeResponse = EmployeeResponse.builder()
+                .name("testName")
+                .email("test@gmail.com")
+                .reports(null)
+                .build();
+
+        updatedEmployeeResponse = EmployeeResponse.builder()
+                .name("testName1")
+                .email("test1@gmail.com")
+                .reports(null)
+                .build();
+    }
 
     @Test
     void itShouldSaveEmployeeWhenValidEmployeeRequestBody() throws Exception {
@@ -73,27 +127,76 @@ class EmployeeControllerTest {
 
     @Test
     void itShouldGetEmployeeWhenValidEmployeeName() throws Exception {
-        SaveEmployeeRequest request = SaveEmployeeRequest.builder()
-                .name("testName")
-                .email("testEmail")
-                .build();
-
-        Employee employee = Employee.builder()
-                .name("testName")
-                .email("testEmail")
-                .build();
-
-        employeeService.saveEmployee(request);
 
         String employeeName = "testName";
 
-        when(employeeService.getEmployeeByName(employeeName)).thenReturn(employee);
+        when(employeeService.getEmployeeByName(employeeName)).thenReturn(employeeActive);
 
-        mockMvc.perform(get("/v1/employee")
+        mockMvc.perform(get("/v1/employee/searchEmployee")
+                .param("name", employeeName)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(serializeJson(request)))
+                .content(serializeJson(employeeActive)))
                 .andDo(print())
-                .andExpect(jsonPath("$.name").value(request.getName()))
+                .andExpect(jsonPath("$.name").value(employeeName))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldGetEmployeeWhenValidId() throws Exception {
+        Integer employeeId = 1;
+
+        when(employeeService.getEmployeeById(employeeId)).thenReturn(employeeActive);
+
+        mockMvc.perform(get("/v1/employee/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serializeJson(employeeActive)))
+                .andExpect(jsonPath("$._id").value(employeeId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldUpdateEmployeeWhenValidEmployeeUpdateRequest() throws Exception {
+        Integer employeeId = 1;
+
+        when(employeeService.updateEmployee(employeeId, updateEmployeeRequest)).thenReturn(updatedEmployeeResponse);
+
+        mockMvc.perform(put("/v1/employee/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serializeJson(updatedEmployeeResponse)))
+                .andExpect(jsonPath("$.email").value("test1@gmail.com"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldDeleteEmployeeWhenValidId() throws Exception {
+        Integer employeeId = 1;
+
+        doNothing().when(employeeService).deleteEmployeeById(employeeId);
+
+        mockMvc.perform(delete("/v1/employee/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldDeactivateActiveEmployeeWhenValid() throws Exception {
+        Integer employeeId = 1;
+
+        doNothing().when(employeeService).deactivateEmployee(employeeId);
+
+        mockMvc.perform(patch("/v1/employee/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldActivateNotActiveEmployeeWhenValid() throws Exception {
+        Integer employeeId = 2;
+
+        doNothing().when(employeeService).activateEmployee(employeeId);
+
+        mockMvc.perform(patch("/v1/employee/activate/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
