@@ -9,6 +9,9 @@ Query Center is a web application that provides an interface to query and analyz
 - React 18.2
 - MongoDB
 - Maven
+- Junit 5 
+- Mockito
+- Integration Tests
 - Docker
 - Docker Compose
 - Github Actions
