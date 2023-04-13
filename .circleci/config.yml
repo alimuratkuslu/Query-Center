@@ -1,0 +1,18 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: openjdk:17
+    steps:
+      - checkout
+      - run:
+          name: Clean Build
+          command: ./mvnw clean install
+      - run:
+          name: Run Tests
+          command: ./mvnw test
+workflows:
+  build-workflow:
+    jobs:
+      - build
