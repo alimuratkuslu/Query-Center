@@ -1,5 +1,6 @@
 package com.bizu.querycenter.controller;
 
+import com.bizu.querycenter.dto.Add.AddReportToEmployee;
 import com.bizu.querycenter.dto.ReportToEmployee;
 import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
 import com.bizu.querycenter.dto.Request.SaveReportRequest;
@@ -186,6 +187,108 @@ class EmployeeControllerTest {
 
         mockMvc.perform(patch("/v1/employee/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldGiveOwnershipToValidUser() throws Exception {
+        Integer employeeId = 1;
+        String reportName = "Test Report";
+
+        AddReportToEmployee request = AddReportToEmployee.builder()
+                .reportName(reportName)
+                .build();
+
+        doNothing().when(employeeService).giveOwnershipToEmployee(employeeId, request);
+
+        mockMvc.perform(post("/v1/employee/giveOwnership/{employeeId}", 1)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(serializeJson(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldGiveReadOwnershipToValidUser() throws Exception {
+        Integer employeeId = 1;
+        String reportName = "Test Report";
+
+        AddReportToEmployee request = AddReportToEmployee.builder()
+                .reportName(reportName)
+                .build();
+
+        doNothing().when(employeeService).giveReadOwnership(employeeId, request);
+
+        mockMvc.perform(post("/v1/employee/giveReadOwnership/{employeeId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(serializeJson(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldGiveWriteOwnershipToValidUser() throws Exception {
+        Integer employeeId = 1;
+        String reportName = "Test Report";
+
+        AddReportToEmployee request = AddReportToEmployee.builder()
+                .reportName(reportName)
+                .build();
+
+        doNothing().when(employeeService).giveWriteOwnership(employeeId, request);
+
+        mockMvc.perform(post("/v1/employee/giveWriteOwnership/{employeeId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(serializeJson(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldGiveRunOwnershipToValidUser() throws Exception {
+        Integer employeeId = 1;
+        String reportName = "Test Report";
+
+        AddReportToEmployee request = AddReportToEmployee.builder()
+                .reportName(reportName)
+                .build();
+
+        doNothing().when(employeeService).giveRunOwnership(employeeId, request);
+
+        mockMvc.perform(post("/v1/employee/giveRunOwnership/{employeeId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(serializeJson(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldGiveAllOwnershipFromValidUser() throws Exception {
+        Integer employeeId = 1;
+        String reportName = "Test Report";
+
+        AddReportToEmployee request = AddReportToEmployee.builder()
+                .reportName(reportName)
+                .build();
+
+        doNothing().when(employeeService).giveAllOwnerships(employeeId, request);
+
+        mockMvc.perform(post("/v1/employee/giveAllOwnerships/{employeeId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(serializeJson(request)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldDeleteOwnershipToValidUser() throws Exception {
+        Integer employeeId = 1;
+        String reportName = "Test Report";
+
+        AddReportToEmployee request = AddReportToEmployee.builder()
+                .reportName(reportName)
+                .build();
+
+        doNothing().when(employeeService).deleteOwnership(employeeId, request);
+
+        mockMvc.perform(post("/v1/employee/deleteOwnership/{employeeId}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(serializeJson(request)))
                 .andExpect(status().isOk());
     }
 
