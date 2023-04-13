@@ -12,6 +12,7 @@ Query Center is a web application that provides an interface to query and analyz
 - Junit 5 
 - Mockito
 - Integration Tests
+- Circle CI
 - Docker
 - Docker Compose
 - Github Actions
