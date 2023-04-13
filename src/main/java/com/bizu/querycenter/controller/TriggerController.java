@@ -5,6 +5,7 @@ import com.bizu.querycenter.dto.Request.SaveTriggerRequest;
 import com.bizu.querycenter.dto.Response.TriggerResponse;
 import com.bizu.querycenter.model.Trigger;
 import com.bizu.querycenter.service.TriggerService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ public class TriggerController {
     }
 
     @GetMapping
+    @Cacheable("triggers")
     public ResponseEntity<List<Trigger>> getAllTriggers(){
         return ResponseEntity.ok(triggerService.getAllTriggers());
     }

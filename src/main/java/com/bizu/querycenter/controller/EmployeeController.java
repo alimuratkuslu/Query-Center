@@ -6,6 +6,7 @@ import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
 import com.bizu.querycenter.dto.Response.EmployeeResponse;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.service.EmployeeService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class EmployeeController {
     }
 
     @GetMapping
+    @Cacheable("employees")
     public ResponseEntity<List<Employee>> getAllEmployees(){
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }

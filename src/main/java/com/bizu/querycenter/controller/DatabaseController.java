@@ -8,6 +8,7 @@ import com.bizu.querycenter.service.DatabaseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class DatabaseController {
     }
 
     @GetMapping
+    @Cacheable("databases")
     public ResponseEntity<List<Database>> getAllDatabases(){
         return ResponseEntity.ok(databaseService.getAllDatabases());
     }
