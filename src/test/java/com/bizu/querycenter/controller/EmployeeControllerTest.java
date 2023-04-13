@@ -163,7 +163,7 @@ class EmployeeControllerTest {
 
         mockMvc.perform(put("/v1/employee/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(serializeJson(updatedEmployeeResponse)))
+                .content(serializeJson(updateEmployeeRequest)))
                 .andExpect(jsonPath("$.email").value("test1@gmail.com"))
                 .andExpect(status().isOk());
     }
@@ -187,6 +187,17 @@ class EmployeeControllerTest {
 
         mockMvc.perform(patch("/v1/employee/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void itShouldActivateNotActiveEmployeeWhenValid() throws Exception {
+        Integer employeeId = 2;
+
+        doNothing().when(employeeService).activateEmployee(employeeId);
+
+        mockMvc.perform(patch("/v1/employee/activate/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -289,17 +300,6 @@ class EmployeeControllerTest {
         mockMvc.perform(post("/v1/employee/deleteOwnership/{employeeId}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(serializeJson(request)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void itShouldActivateNotActiveEmployeeWhenValid() throws Exception {
-        Integer employeeId = 2;
-
-        doNothing().when(employeeService).activateEmployee(employeeId);
-
-        mockMvc.perform(patch("/v1/employee/activate/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
