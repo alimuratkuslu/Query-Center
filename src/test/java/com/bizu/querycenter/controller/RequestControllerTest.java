@@ -127,6 +127,20 @@ class RequestControllerTest {
     }
 
     @Test
+    void itShouldGetRequestWhenValidIdParam() throws Exception {
+        String stringRequestId = "1";
+        Integer requestId = Integer.parseInt(stringRequestId);
+
+        when(requestService.getRequestById(requestId)).thenReturn(finishedRequest);
+
+        mockMvc.perform(get("/v1/request/searchRequest")
+                        .param("id", stringRequestId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$._id").value(requestId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void itShouldUpdateRequestWhenValidRequestUpdateRequest() throws Exception {
         Integer requestId = 1;
 
