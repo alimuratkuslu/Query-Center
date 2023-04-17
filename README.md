@@ -21,8 +21,9 @@ Query Center is a web application that provides an interface to query and analyz
 
 1. Clone this repository: git clone https://github.com/alimuratkuslu/Query-Center.git
 2. Navigate to the project directory: `cd querycenter` 
-3. Run `docker-compose up`  to start the application.
-4. Once the containers are up and running, navigate to http://localhost:3000 to access the application.
+3. Run `docker-compose build` to build the images necessary to run the application.
+4. Run `docker-compose up`  to start the application.
+5. Once the containers are up and running, navigate to http://localhost:3000 to access the application.
 
 ## Prerequisites
 
