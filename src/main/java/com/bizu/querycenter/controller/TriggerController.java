@@ -60,3 +60,9 @@ public class TriggerController {
         triggerService.deleteTriggerById(id);
     }
 }
+
+
+
+
+
+

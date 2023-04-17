@@ -29,4 +29,8 @@ public class Employee {
     private List<Report> reports;
 
     private boolean isActive;
+
+    private String password;
+
+    private Role role;
 }

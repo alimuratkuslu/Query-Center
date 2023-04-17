@@ -10,6 +10,14 @@ const columns = [
   { field: '_id', headerName: 'ID', width: 70 },
   { field: 'name', headerName: 'Full Name', width: 130 },
   { field: 'email', headerName: 'Email', width: 300 },
+  { field: 'role', headerName: 'Role', width: 130, valueGetter: (params) => {
+    if (params.row.role) {
+      return params.row.role;
+    } else {
+      return "-";
+    }
+  }, 
+},
 ];
 
 const getRowId = (row) => row._id;

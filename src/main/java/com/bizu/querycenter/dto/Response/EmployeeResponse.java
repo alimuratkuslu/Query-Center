@@ -1,6 +1,7 @@
 package com.bizu.querycenter.dto.Response;
 
 import com.bizu.querycenter.model.Report;
+import com.bizu.querycenter.model.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,6 +17,9 @@ public class EmployeeResponse {
 
     @JsonProperty("email")
     private String email;
+
+    @JsonProperty("role")
+    private Role role;
 
     @JsonProperty("reports")
     private List<Report> reports;

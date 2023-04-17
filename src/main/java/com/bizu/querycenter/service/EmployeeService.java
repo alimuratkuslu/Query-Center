@@ -8,6 +8,7 @@ import com.bizu.querycenter.dto.Response.EmployeeResponse;
 import com.bizu.querycenter.model.Employee;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.ReportOwnership;
+import com.bizu.querycenter.model.Role;
 import com.bizu.querycenter.repository.EmployeeRepository;
 import com.bizu.querycenter.repository.ReportRepository;
 import com.mongodb.ConnectionString;
@@ -51,6 +52,11 @@ public class EmployeeService {
         Employee employee = employeeRepository.findByName(employeeName);
 
         return employee;
+    }
+
+    public Employee getEmployeeByMail(String email){
+
+        return employeeRepository.findByEmail(email);
     }
 
     public List<String> runQuery(String filter, String databaseName){
@@ -110,6 +116,8 @@ public class EmployeeService {
                 .email(request.getEmail())
                 .reports(reports)
                 .isActive(true)
+                .password(request.getPassword())
+                .role(Role.USER)
                 .build();
 
         Employee fromDB = employeeRepository.save(employee);
@@ -118,6 +126,7 @@ public class EmployeeService {
                 .name(fromDB.getName())
                 .email(fromDB.getEmail())
                 .reports(fromDB.getReports())
+                .role(fromDB.getRole())
                 .build();
     }
 

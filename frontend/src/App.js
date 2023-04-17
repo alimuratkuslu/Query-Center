@@ -1,4 +1,3 @@
-import './App.css';
 import LoginPage from './components/LoginPage';
 import DatabaseList from './components/Databases/DatabaseList';
 import EmployeeList from './components/Employees/EmployeeList';
@@ -21,37 +20,45 @@ import AddOwnership from './components/Ownerships/AddOwnership';
 import AddRequest from './components/Requests/AddRequest';
 import AddTeam from './components/Teams/AddTeam';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute';
+import { Fragment } from 'react';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route exact path='/login' element={<LoginPage />} />
-        <Route exact path='/' element={<Dashboard />} />
-        <Route exact path='/employee' element={<EmployeeList />} />
-        <Route exact path='/report' element={<ReportList />} />
-        <Route exact path='/report-schedules/:selectedReport' element={<ReportSchedules />} />
-        <Route exact path='/schedule' element={<ScheduleList />} />
-        <Route exact path='/trigger' element={<TriggerList />} />
-        <Route exact path='/ownership' element={<ReportOwnershipList />} />
-        <Route exact path='/request' element={<RequestList />} />
-        <Route exact path='/team' element={<TeamList />} />
-        <Route exact path='/database' element={<DatabaseList />} />
-        <Route exact path='/searchReport' element={<SearchReport />} />
-        <Route exact path='/addEmployee' element={<AddEmployee />} />
-        <Route exact path='/addReport' element={<AddReport />} />
-        <Route exact path='/addSchedule' element={<AddSchedule />} />
-        <Route exact path='/update-schedule/:selectedSchedule' element={<UpdateSchedule />} />
-        <Route exact path='/addTrigger' element={<AddTrigger />} />
-        <Route exact path='/addOwnership' element={<AddOwnership />} />
-        <Route exact path='/addRequest' element={<AddRequest />} />
-        <Route exact path='/addTeam' element={<AddTeam />} />
-        <Route exact path='/addDatabase' element={<AddDatabase />} />
-      </Routes>
+      <Fragment>
+        <Routes>
+          <Route exact path='/auth/login' element={<LoginPage />} />
+          <Route exact path='/' element={<Dashboard />} />
+          <Route exact path='/employee' element={<EmployeeList />} />
+          <Route exact path='/report' element={<ReportList />} />
+          <Route exact path='/report-schedules/:selectedReport' element={<ReportSchedules />} />
+          <Route exact path='/schedule' element={<ScheduleList />} />
+          <Route exact path='/trigger' element={<TriggerList />} />
+          <Route exact path='/ownership' element={<ReportOwnershipList />} />
+          <Route exact path='/request' element={<RequestList />} />
+          <Route exact path='/team' element={<TeamList />} />
+          <Route exact path='/database' element={<DatabaseList />} />
+          <Route exact path='/searchReport' element={<SearchReport />} />
+          <Route exact path='/addEmployee' element={<AddEmployee />} />
+          <Route exact path='/addReport' element={<AddReport />} />
+          <Route exact path='/addSchedule' element={<AddSchedule />} />
+          <Route exact path='/update-schedule/:selectedSchedule' element={<UpdateSchedule />} />
+          <Route exact path='/addTrigger' element={<AddTrigger />} />
+          <Route exact path='/addOwnership' element={<AddOwnership />} />
+          <Route exact path='/addRequest' element={<AddRequest />} />
+          <Route exact path='/addTeam' element={<AddTeam />} />
+          <Route exact path='/addDatabase' element={<AddDatabase />} />
+        </Routes>
+      </Fragment>
     </Router>
   );
 }
 
 export default App;
+
+// <Navigate to={{ pathname: '/auth/login'}} />
 
 

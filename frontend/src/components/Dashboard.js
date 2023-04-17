@@ -144,12 +144,6 @@ const Dashboard = () => {
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Databases" />
           </ListItem>
-          <ListItem button component={Link} to="/searchReport" onClick={() => handlePageChange('Search Reports')}>
-            <ListItemIcon>
-              <FindInPageIcon />
-            </ListItemIcon>
-            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Search Reports" />
-          </ListItem>
         </List>
         <IconButton
           onClick={drawerOpen ? handleDrawerClose : handleDrawerOpen}
@@ -163,3 +157,13 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+/*
+Search Reports 
+<ListItem button component={Link} to="/searchReport" onClick={() => handlePageChange('Search Reports')}>
+            <ListItemIcon>
+              <FindInPageIcon />
+            </ListItemIcon>
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Search Reports" />
+          </ListItem>
+*/

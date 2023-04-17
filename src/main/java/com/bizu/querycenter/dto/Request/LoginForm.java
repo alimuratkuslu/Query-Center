@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SaveEmployeeRequest {
+public class LoginForm {
 
-    private String name;
     private String email;
     private String password;
 }
