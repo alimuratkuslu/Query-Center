@@ -14,6 +14,7 @@ import CopyrightIcon from '@mui/icons-material/Copyright';
 import RequestPageIcon from '@mui/icons-material/RequestPage';
 import GroupIcon from '@mui/icons-material/Group';
 import StorageIcon from '@mui/icons-material/Storage';
+import LockIcon from '@mui/icons-material/Lock';
 
 const Dashboard = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -29,6 +30,9 @@ const Dashboard = () => {
   };
 
   const handlePageChange = (title) => {
+    if(title == 'Logout'){
+      localStorage.removeItem('token');
+    }
     console.log(title);
     setAppBarTitle(title);
     handleDrawerClose();
@@ -144,6 +148,12 @@ const Dashboard = () => {
             </ListItemIcon>
             <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Databases" />
           </ListItem>
+          <ListItem button component={Link} to="/auth/login" onClick={() => handlePageChange('Logout')}>
+            <ListItemIcon>
+              <LockIcon />
+            </ListItemIcon>
+            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Logout" />
+          </ListItem>
         </List>
         <IconButton
           onClick={drawerOpen ? handleDrawerClose : handleDrawerOpen}
@@ -157,13 +167,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-/*
-Search Reports 
-<ListItem button component={Link} to="/searchReport" onClick={() => handlePageChange('Search Reports')}>
-            <ListItemIcon>
-              <FindInPageIcon />
-            </ListItemIcon>
-            <ListItemText primaryTypographyProps={{fontSize: '28px'}} primary="Search Reports" />
-          </ListItem>
-*/

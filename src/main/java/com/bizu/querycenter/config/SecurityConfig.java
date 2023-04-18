@@ -43,33 +43,6 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .cors().and()
-                .authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/v1/auth/login")
-                .defaultSuccessUrl("/v1", true)
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/v1/logout")
-                .logoutSuccessUrl("/v1/logout")
-                .permitAll()
-                .and()
-                .httpBasic().disable()
-                .exceptionHandling()
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
-        /*
-        return http
-                .csrf().disable()
-                .cors().and()
                 .authorizeRequests().
                 requestMatchers("/v1/auth/login").permitAll()
                 .anyRequest().authenticated()
@@ -87,7 +60,7 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-         */
+
     }
 
     @Bean
