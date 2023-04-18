@@ -15,6 +15,7 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import org.bson.Document;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,11 +29,14 @@ public class EmployeeService {
 
     private final ReportOwnershipService ownershipService;
 
+    private final PasswordEncoder passwordEncoder;
 
-    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipService ownershipService) {
+
+    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipService ownershipService, PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
         this.ownershipService = ownershipService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Employee getEmployeeById(Integer id){
@@ -116,7 +120,7 @@ public class EmployeeService {
                 .email(request.getEmail())
                 .reports(reports)
                 .isActive(true)
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
 
