@@ -16,6 +16,7 @@ Query Center is a web application that provides an interface to query and analyz
 - Docker
 - Docker Compose
 - Github Actions
+- OpenAPI
 
 ## Installation
 
