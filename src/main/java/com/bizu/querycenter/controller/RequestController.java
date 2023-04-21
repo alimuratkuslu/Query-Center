@@ -4,7 +4,6 @@ import com.bizu.querycenter.dto.Request.SaveRequestRequest;
 import com.bizu.querycenter.dto.Response.RequestResponse;
 import com.bizu.querycenter.model.Request;
 import com.bizu.querycenter.service.RequestService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,6 @@ public class RequestController {
     }
 
     @GetMapping
-    @Cacheable("requests")
     public ResponseEntity<List<Request>> getAllRequests(){
         return ResponseEntity.ok(requestService.getAllRequests());
     }

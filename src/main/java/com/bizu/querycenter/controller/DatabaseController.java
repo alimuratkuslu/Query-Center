@@ -28,7 +28,6 @@ public class DatabaseController {
     }
 
     @GetMapping
-    @Cacheable("databases")
     public ResponseEntity<List<Database>> getAllDatabases(){
         return ResponseEntity.ok(databaseService.getAllDatabases());
     }

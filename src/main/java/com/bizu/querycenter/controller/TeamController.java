@@ -5,7 +5,6 @@ import com.bizu.querycenter.dto.Request.SaveTeamRequest;
 import com.bizu.querycenter.dto.Response.TeamResponse;
 import com.bizu.querycenter.model.Team;
 import com.bizu.querycenter.service.TeamService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +27,6 @@ public class TeamController {
     }
 
     @GetMapping
-    @Cacheable("teams")
     public ResponseEntity<List<Team>> getAllTeams(){
         return ResponseEntity.ok(teamService.getAllTeams());
     }

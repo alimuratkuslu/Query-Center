@@ -28,7 +28,6 @@ public class TriggerController {
     }
 
     @GetMapping
-    @Cacheable("triggers")
     public ResponseEntity<List<Trigger>> getAllTriggers(){
         return ResponseEntity.ok(triggerService.getAllTriggers());
     }

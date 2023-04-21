@@ -6,7 +6,6 @@ import com.bizu.querycenter.dto.Request.SaveScheduleRequest;
 import com.bizu.querycenter.dto.Response.ScheduleResponse;
 import com.bizu.querycenter.model.Schedule;
 import com.bizu.querycenter.service.ScheduleService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,6 @@ public class ScheduleController {
     }
 
     @GetMapping
-    @Cacheable("schedules")
     public ResponseEntity<List<Schedule>> getAllSchedules(){
         return ResponseEntity.ok(scheduleService.getAllSchedules());
     }
