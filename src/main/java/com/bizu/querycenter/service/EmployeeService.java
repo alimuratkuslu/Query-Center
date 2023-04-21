@@ -11,6 +11,7 @@ import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.model.Role;
 import com.bizu.querycenter.repository.EmployeeRepository;
 import com.bizu.querycenter.repository.ReportRepository;
+import com.bizu.querycenter.repository.RoleRepository;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
@@ -19,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -27,14 +30,21 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ReportRepository reportRepository;
 
+    private final RoleRepository roleRepository;
+
     private final ReportOwnershipService ownershipService;
 
     private final PasswordEncoder passwordEncoder;
 
 
-    public EmployeeService(EmployeeRepository employeeRepository, ReportRepository reportRepository, ReportOwnershipService ownershipService, PasswordEncoder passwordEncoder) {
+    public EmployeeService(EmployeeRepository employeeRepository,
+                           ReportRepository reportRepository,
+                           RoleRepository roleRepository,
+                           ReportOwnershipService ownershipService,
+                           PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
+        this.roleRepository = roleRepository;
         this.ownershipService = ownershipService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -112,6 +122,7 @@ public class EmployeeService {
 
         List<Employee> employees = getAllEmployees();
         List<Report> reports = new ArrayList<>();
+        Role userRole = roleRepository.findByName("USER");
         int size = employees.size() + 2;
 
         Employee employee = Employee.builder()
@@ -121,7 +132,7 @@ public class EmployeeService {
                 .reports(reports)
                 .isActive(true)
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .roles(new HashSet<>(Arrays.asList(userRole)))
                 .build();
 
         Employee fromDB = employeeRepository.save(employee);
@@ -130,7 +141,7 @@ public class EmployeeService {
                 .name(fromDB.getName())
                 .email(fromDB.getEmail())
                 .reports(fromDB.getReports())
-                .role(fromDB.getRole())
+                .roles(fromDB.getRoles())
                 .build();
     }
 

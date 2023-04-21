@@ -7,6 +7,7 @@ import lombok.Builder;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Document("EmployeeResponse")
@@ -18,9 +19,10 @@ public class EmployeeResponse {
     @JsonProperty("email")
     private String email;
 
-    @JsonProperty("role")
-    private Role role;
 
     @JsonProperty("reports")
     private List<Report> reports;
+
+    @JsonProperty("roles")
+    private Set<Role> roles;
 }

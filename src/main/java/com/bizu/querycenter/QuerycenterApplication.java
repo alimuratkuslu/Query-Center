@@ -1,8 +1,10 @@
 package com.bizu.querycenter;
 
-import com.bizu.querycenter.model.Employee;
+import com.bizu.querycenter.dto.Request.SaveEmployeeRequest;
+import com.bizu.querycenter.dto.Response.EmployeeResponse;
 import com.bizu.querycenter.model.Role;
-import com.bizu.querycenter.repository.EmployeeRepository;
+import com.bizu.querycenter.repository.RoleRepository;
+import com.bizu.querycenter.service.EmployeeService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,11 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableCaching
 public class QuerycenterApplication implements CommandLineRunner {
 
-	private final EmployeeRepository employeeRepository;
+	private final EmployeeService employeeService;
+	private final RoleRepository roleRepository;
 	private final PasswordEncoder passwordEncoder;
 
-	public QuerycenterApplication(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
-		this.employeeRepository = employeeRepository;
+	public QuerycenterApplication(EmployeeService employeeService, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+		this.employeeService = employeeService;
+		this.roleRepository = roleRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 
@@ -30,28 +34,35 @@ public class QuerycenterApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Employee employee1 = Employee.builder()
-				._id(100)
+		Role roleAdmin = Role.builder()
+				._id(1)
+				.name("ADMIN")
+				.build();
+
+		Role roleUser = Role.builder()
+				._id(2)
+				.name("USER")
+				.build();
+
+		roleRepository.save(roleAdmin);
+		roleRepository.save(roleUser);
+
+		SaveEmployeeRequest employee1 = SaveEmployeeRequest.builder()
 				.name("Duru Kuşlu")
 				.email("duru@gmail.com")
 				.password(passwordEncoder.encode("durupass"))
-				.role(Role.USER)
-				.isActive(true)
 				.build();
 
-		Employee employee2 = Employee.builder()
-				._id(101)
+		SaveEmployeeRequest employee2 = SaveEmployeeRequest.builder()
 				.name("AliMuratKuslu")
-				.email("alimurat@gmail.com")
+				.email("alim@gmail.com")
 				.password(passwordEncoder.encode("alipass"))
-				.role(Role.ADMIN)
-				.isActive(true)
 				.build();
 
-		employeeRepository.save(employee1);
-		employeeRepository.save(employee2);
-		System.out.println(employee1);
-		System.out.println(employee2);
+		EmployeeResponse response1 = employeeService.saveEmployee(employee1);
+		EmployeeResponse response2 = employeeService.saveEmployee(employee2);
+		System.out.println(response1);
+		System.out.println(response2);
 
 	}
 }
