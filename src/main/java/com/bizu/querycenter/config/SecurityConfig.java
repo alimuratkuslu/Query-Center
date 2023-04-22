@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -44,27 +46,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-            .authorizeHttpRequests(authConfig -> {
-                authConfig.requestMatchers("/v1/trigger").permitAll();
-                authConfig.requestMatchers("/v1/employee").authenticated();
-                authConfig.requestMatchers("/v1/team").denyAll();
-            })
-            .formLogin()
-                .loginPage("/v1/auth/login").defaultSuccessUrl("/v1", true)
-                .and()
-                .httpBasic().disable();
-
-        return http.build();
-
-        /*
         return http
                 .csrf().disable()
                 .cors().and()
+                /*
                 .authorizeHttpRequests()
-                .requestMatchers("/v1/auth/login").permitAll()
-                .anyRequest().authenticated()
-                .and()
+                    .requestMatchers("/v1/auth/login").permitAll()
+                    .anyRequest().authenticated()
+                 */
+                .authorizeHttpRequests((authz) -> authz
+                        .requestMatchers("/v1/employee").hasAuthority("ADMIN")
+                        .requestMatchers("/v1/team").hasAuthority("USER")
+                        .anyRequest().authenticated()
+                        .and())
                 .formLogin()
                 .loginPage("/v1/auth/login").defaultSuccessUrl("/v1", true)
                 .and()
@@ -78,13 +72,12 @@ public class SecurityConfig {
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-         */
     }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return (web -> web.ignoring()
-                .requestMatchers("/v1/**", "/swagger-ui/*", "/v3/*"));
+                .requestMatchers("/v1/auth/login", "/swagger-ui/*", "/v3/*"));
     }
 
     @Bean

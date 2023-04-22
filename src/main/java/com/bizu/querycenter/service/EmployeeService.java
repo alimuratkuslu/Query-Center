@@ -11,7 +11,6 @@ import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.model.Role;
 import com.bizu.querycenter.repository.EmployeeRepository;
 import com.bizu.querycenter.repository.ReportRepository;
-import com.bizu.querycenter.repository.RoleRepository;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
@@ -20,8 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -30,8 +27,6 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ReportRepository reportRepository;
 
-    private final RoleRepository roleRepository;
-
     private final ReportOwnershipService ownershipService;
 
     private final PasswordEncoder passwordEncoder;
@@ -39,12 +34,10 @@ public class EmployeeService {
 
     public EmployeeService(EmployeeRepository employeeRepository,
                            ReportRepository reportRepository,
-                           RoleRepository roleRepository,
                            ReportOwnershipService ownershipService,
                            PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.reportRepository = reportRepository;
-        this.roleRepository = roleRepository;
         this.ownershipService = ownershipService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -122,7 +115,6 @@ public class EmployeeService {
 
         List<Employee> employees = getAllEmployees();
         List<Report> reports = new ArrayList<>();
-        Role userRole = roleRepository.findByName("USER");
         int size = employees.size() + 2;
 
         Employee employee = Employee.builder()
@@ -131,8 +123,8 @@ public class EmployeeService {
                 .email(request.getEmail())
                 .reports(reports)
                 .isActive(true)
+                .role(Role.USER)
                 .password(passwordEncoder.encode(request.getPassword()))
-                .roles(new HashSet<>(Arrays.asList(userRole)))
                 .build();
 
         Employee fromDB = employeeRepository.save(employee);
@@ -141,7 +133,31 @@ public class EmployeeService {
                 .name(fromDB.getName())
                 .email(fromDB.getEmail())
                 .reports(fromDB.getReports())
-                .roles(fromDB.getRoles())
+                .build();
+    }
+
+    public EmployeeResponse saveEmployeeAsAdmin(SaveEmployeeRequest request){
+
+        List<Employee> employees = getAllEmployees();
+        List<Report> reports = new ArrayList<>();
+        int size = employees.size() + 2;
+
+        Employee employee = Employee.builder()
+                ._id(size)
+                .name(request.getName())
+                .email(request.getEmail())
+                .reports(reports)
+                .isActive(true)
+                .role(Role.USER)
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
+
+        Employee fromDB = employeeRepository.save(employee);
+
+        return EmployeeResponse.builder()
+                .name(fromDB.getName())
+                .email(fromDB.getEmail())
+                .reports(fromDB.getReports())
                 .build();
     }
 
