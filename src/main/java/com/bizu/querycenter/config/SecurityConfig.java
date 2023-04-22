@@ -49,11 +49,6 @@ public class SecurityConfig {
         return http
                 .csrf().disable()
                 .cors().and()
-                /*
-                .authorizeHttpRequests()
-                    .requestMatchers("/v1/auth/login").permitAll()
-                    .anyRequest().authenticated()
-                 */
                 .authorizeHttpRequests((authz) -> authz
                         .requestMatchers("/v1/employee").hasAuthority("ADMIN")
                         .requestMatchers("/v1/team").hasAuthority("USER")
