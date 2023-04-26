@@ -29,6 +29,11 @@ public class ReportOwnershipController {
         return ResponseEntity.ok(service.getAllOwnerships());
     }
 
+    @GetMapping("/owned")
+    public ResponseEntity<List<ReportOwnership>> getOwnershipOfEmployee(){
+        return ResponseEntity.ok(service.getOwnershipForEmployee());
+    }
+
     @GetMapping("/searchOwnership")
     public ResponseEntity<ReportOwnership> getOwnershipByName(@RequestParam String name){
         return ResponseEntity.ok(service.getOwnershipByName(name));

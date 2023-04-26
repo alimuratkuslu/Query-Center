@@ -4,6 +4,8 @@ import com.bizu.querycenter.dto.Request.SaveOwnershipRequest;
 import com.bizu.querycenter.model.Report;
 import com.bizu.querycenter.model.ReportOwnership;
 import com.bizu.querycenter.repository.ReportOwnershipRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -47,6 +49,14 @@ public class ReportOwnershipService {
         }
 
         return ownership;
+    }
+
+    public List<ReportOwnership> getOwnershipForEmployee(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String employeeEmail = authentication.getName();
+
+        return repository.findEmployeeByEmail(employeeEmail);
     }
     
     public ReportOwnership doesEmployeeHaveOwnership(Integer employeeId, Integer reportId){
